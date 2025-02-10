@@ -1,0 +1,82 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8149563269461892823",
+      "lastPropertyId": "5:1318878576037536368",
+      "name": "Patient",
+      "properties": [
+        {
+          "id": "1:1377747672927587755",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5066266617367521054",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9054104639275688995",
+          "name": "age",
+          "type": 9
+        },
+        {
+          "id": "4:4372623414988308195",
+          "name": "createdAt",
+          "type": 9
+        },
+        {
+          "id": "5:1318878576037536368",
+          "name": "diagnosis",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:6692188355717474123",
+          "name": "investigations",
+          "targetId": "2:2990477495321148951"
+        }
+      ]
+    },
+    {
+      "id": "2:2990477495321148951",
+      "lastPropertyId": "3:6514375257020923422",
+      "name": "Investigation",
+      "properties": [
+        {
+          "id": "1:1592704029861292345",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8896191955879536739",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:6514375257020923422",
+          "name": "price",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:2990477495321148951",
+  "lastIndexId": "0:0",
+  "lastRelationId": "1:6692188355717474123",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
