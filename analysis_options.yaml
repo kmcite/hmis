@@ -1,4 +1,5 @@
 analyzer:
   errors:
     deprecated_member_use: ignore
-     
+formatter:
+  trailing_commas: preserve

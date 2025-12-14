@@ -1,3 +1,5 @@
+import 'package:hmis/utils/crud.dart';
+
 import '../main.dart';
 
 @Entity()
@@ -8,10 +10,12 @@ class Investigation {
   int price = 200;
 }
 
-class InvestigationsRepository extends CRUD<Investigation> {}
+class InvestigationsRepository with CRUD<Investigation> {}
 
 class InvestigationsBloc with ChangeNotifier {
-  InvestigationsRepository get investigationsRepository => context.of();
+  InvestigationsRepository get investigationsRepository =>
+      InvestigationsRepository();
+
   BuildContext context;
   InvestigationsBloc(this.context);
 

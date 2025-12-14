@@ -1,5 +1,4 @@
 import 'package:hmis/main.dart';
-import 'package:hmis/settings/hospital_repository.dart';
 
 class HomePage extends StatelessWidget {
   static const name = 'home';
@@ -24,12 +23,12 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          Opacity(
-            opacity: 0.4,
-            child: Align(
-              child: Text(context.of<HospitalBloc>().name),
-            ),
-          ),
+          // Opacity(
+          //   opacity: 0.4,
+          //   child: Align(
+          //     child: Text(context.of<HospitalBloc>().name),
+          //   ),
+          // ),
           Opacity(
             opacity: .9,
             child: ListView(
@@ -47,43 +46,47 @@ class HomePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          '${context.of<HospitalBloc>().name}'.text(),
-                          '${context.of<HospitalBloc>().city}'.text(),
-                          '${context.of<HospitalBloc>().info}'.text(),
+                          // '${context.of<HospitalBloc>().name}'.text(),
+                          // '${context.of<HospitalBloc>().city}'.text(),
+                          // '${context.of<HospitalBloc>().info}'.text(),
                         ],
                       ),
-                    ).pad(),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.icon(
-                    onPressed: () => context
-                        .of<RouterBloc>()
-                        .toRouteByName(PatientsPage.name),
+                    onPressed: () {
+                      // context
+                      //   .of<RouterBloc>()
+                      //   .toRouteByName(PatientsPage.name);
+                    },
                     icon: const Icon(FontAwesomeIcons.route),
                     label: Align(
                       alignment: Alignment.centerLeft,
-                      child: 'patients'.text(),
-                    ).pad(),
+                      child: Text('patients'),
+                    ),
                   ),
                 ),
                 FilledButton.icon(
-                  onPressed: () => context
-                      .of<RouterBloc>()
-                      .toRouteByName(InvestigationsPage.name),
+                  onPressed: () {
+                    // context
+                    //   .of<RouterBloc>()
+                    //   .toRouteByName(InvestigationsPage.name);
+                  },
                   icon: const Icon(FontAwesomeIcons.fileInvoice),
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: 'investigations'.text(),
+                      child: Text('investigations'),
                     ),
                   ),
-                ).pad(),
+                ),
                 FilledButton.icon(
                   onPressed: () {
-                    context.of<RouterBloc>().toRouteByName('settings');
+                    // context.of<RouterBloc>().toRouteByName('settings');
                   },
                   icon: const Icon(FontAwesomeIcons.confluence),
                   label: Padding(
@@ -93,7 +96,7 @@ class HomePage extends StatelessWidget {
                       child: Text('settings'),
                     ),
                   ),
-                ).pad(),
+                ),
               ],
             ),
           ),

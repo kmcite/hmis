@@ -3,7 +3,7 @@ import 'package:hmis/main.dart';
 class SettingsBloc with ChangeNotifier {
   final BuildContext context;
   SettingsBloc(this.context);
-  SettingsRepository get _settingsRepository => context.of();
+  SettingsRepository get _settingsRepository => throw ();
 
   ThemeMode get themeMode => _settingsRepository.themeMode;
   // String get hospitalName => _settingsRepository.hospitalName;

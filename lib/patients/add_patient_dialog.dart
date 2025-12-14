@@ -1,5 +1,3 @@
-import 'package:hmis/patients/patients_bloc.dart';
-
 import '../main.dart';
 
 class AddPatientPage extends StatelessWidget {
@@ -55,14 +53,14 @@ class AddPatientPage extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final patient = Patient()
-                ..name = nameRM.text
-                ..age = ageRM.text;
-              context
-                ..of<PatientsBloc>().put(patient)
-                ..pop();
-            }
+            // if (_formKey.currentState!.validate()) {
+            //   final patient = Patient()
+            //     ..name = nameRM.text
+            //     ..age = ageRM.text;
+            //   context
+            //     ..of<PatientsBloc>().put(patient)
+            //     ..pop();
+            // }
           },
           child: const Text('save'),
         ),

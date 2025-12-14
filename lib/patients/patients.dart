@@ -1,4 +1,5 @@
 import 'package:hmis/main.dart';
+import 'package:hmis/utils/crud.dart';
 
 @Entity()
 class Patient {
@@ -33,7 +34,7 @@ class Patient {
   }
 }
 
-class PatientsRepository extends CRUD<Patient> {}
+class PatientsRepository with CRUD<Patient> {}
 
 enum OutComeStatus {
   emergency,

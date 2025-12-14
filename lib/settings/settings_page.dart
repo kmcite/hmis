@@ -1,6 +1,4 @@
 import 'package:hmis/main.dart';
-import 'package:hmis/settings/hospital_repository.dart';
-import 'package:hmis/settings/settings_bloc.dart';
 
 const double paddingValue = 16.0;
 const double borderRadiusValue = 12.0;
@@ -43,8 +41,8 @@ class SettingsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadiusValue),
               ),
             ),
-            initialValue: context.of<HospitalBloc>().name,
-            onChanged: context.of<HospitalBloc>().setName,
+            // initialValue: context.of<HospitalBloc>().name,
+            // onChanged: context.of<HospitalBloc>().setName,
             maxLength: 4,
           ),
           TextFormField(
@@ -54,8 +52,8 @@ class SettingsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadiusValue),
               ),
             ),
-            initialValue: context.of<HospitalBloc>().city,
-            onChanged: context.of<HospitalBloc>().setCity,
+            // initialValue: context.of<HospitalBloc>().city,
+            // onChanged: context.of<HospitalBloc>().setCity,
             maxLength: 20,
           ),
           TextFormField(
@@ -65,8 +63,8 @@ class SettingsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadiusValue),
               ),
             ),
-            initialValue: context.of<HospitalBloc>().info,
-            onChanged: context.of<HospitalBloc>().setInfo,
+            // initialValue: context.of<HospitalBloc>().info,
+            // onChanged: context.of<HospitalBloc>().setInfo,
             minLines: 2,
             maxLength: 50,
             maxLines: 4,
@@ -78,7 +76,9 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildThemeToggleButton(BuildContext context) {
     return FilledButton(
-      onPressed: context.of<SettingsBloc>().toggleThemeMode,
+      onPressed: () {
+        // context.of<SettingsBloc>().toggleThemeMode;
+      },
       child: Row(
         children: [
           Padding(
@@ -96,21 +96,19 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildInvestigationsButton(BuildContext context) {
     return FilledButton(
-      onPressed: context
-              .of<InvestigationsBloc>()
-              .investigations
-              .toSet()
-              .containsAll([])
-          ? null
-          : () {
-              // for (final investigation in investigationsBuiltIn) {
-              //   if (!context.of<InvestigationsBloc>().state.contains(
-              //         investigation,
-              //       )) {
-              //     context.of<InvestigationsBloc>().put(investigation);
-              //   }
-              // }
-            },
+      onPressed: () {
+        // context.of<InvestigationsBloc>().investigations.toSet().containsAll([])
+        //     ? null
+        //     : () {
+        //         // for (final investigation in investigationsBuiltIn) {
+        //         //   if (!context.of<InvestigationsBloc>().state.contains(
+        //         //         investigation,
+        //         //       )) {
+        //         //     context.of<InvestigationsBloc>().put(investigation);
+        //         //   }
+        //         // }
+        //       };
+      },
       child: Row(
         children: const [
           Padding(

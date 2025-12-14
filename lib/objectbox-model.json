@@ -66,10 +66,65 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:8256106150187910572",
+      "lastPropertyId": "8:4764728743041467332",
+      "name": "ErMark",
+      "properties": [
+        {
+          "id": "1:2774845795759767438",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4251147828872193886",
+          "name": "date",
+          "type": 10,
+          "flags": 8,
+          "indexId": "1:5736295201799532182"
+        },
+        {
+          "id": "3:112231436927397881",
+          "name": "shift",
+          "type": 6,
+          "flags": 8,
+          "indexId": "2:6093058829891019382"
+        },
+        {
+          "id": "4:6972151353621539921",
+          "name": "caseType",
+          "type": 6,
+          "flags": 8,
+          "indexId": "3:480363263721069933"
+        },
+        {
+          "id": "5:827515613656067262",
+          "name": "patientName",
+          "type": 9
+        },
+        {
+          "id": "6:98714836605012784",
+          "name": "ageYears",
+          "type": 6
+        },
+        {
+          "id": "7:4997400043049280707",
+          "name": "remarks",
+          "type": 9
+        },
+        {
+          "id": "8:4764728743041467332",
+          "name": "createdAt",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:2990477495321148951",
-  "lastIndexId": "0:0",
+  "lastEntityId": "3:8256106150187910572",
+  "lastIndexId": "3:480363263721069933",
   "lastRelationId": "1:6692188355717474123",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

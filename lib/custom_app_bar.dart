@@ -1,5 +1,4 @@
 import 'package:hmis/main.dart';
-import 'package:hmis/user_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -49,7 +48,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton.filledTonal(
                 icon: const Icon(Icons.verified_user),
                 onPressed: () {
-                  context.of<RouterBloc>().toRouteByName(UserPage.name);
+                  // context.of<RouterBloc>().toRouteByName(UserPage.name);
                 },
               ),
         ),

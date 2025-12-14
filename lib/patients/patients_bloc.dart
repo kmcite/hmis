@@ -1,8 +1,7 @@
 import 'package:hmis/main.dart';
-import 'package:hmis/patients/patients.dart';
 
 class PatientsBloc with ChangeNotifier {
-  PatientsRepository get patientsRepository => context.of();
+  PatientsRepository get patientsRepository => PatientsRepository();
 
   final BuildContext context;
   PatientsBloc(this.context);

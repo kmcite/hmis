@@ -64,7 +64,8 @@ class HospitalRepository {
 }
 
 class HospitalBloc extends ChangeNotifier {
-  HospitalRepository get hospitalRepository => context.of();
+  HospitalRepository get hospitalRepository => throw '';
+
   final BuildContext context;
   HospitalBloc(this.context);
 
