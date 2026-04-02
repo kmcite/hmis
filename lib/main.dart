@@ -2,40 +2,47 @@ export 'package:path/path.dart' show join;
 
 import 'dart:io';
 
-// import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-import 'package:hmis/domain/domain.dart';
-import 'package:hmis/utils/router.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:forui/forui.dart';
+import 'package:hmis/bussiness/investigations.dart';
+import 'package:hmis/bussiness/logging.dart';
+import 'package:hmis/bussiness/marks/marks.dart';
+import 'package:hmis/bussiness/native_splash_removal.dart';
+import 'package:hmis/bussiness/navigation.dart';
+import 'package:hmis/bussiness/settings.dart';
+import 'package:hmis/domain/services.dart';
+import 'package:hmis/features/marksheet/marksheet.dart';
+import 'package:hmis/objectbox.g.dart' show openStore;
+import 'package:hmis/bussiness/business.dart';
+import 'package:hmis/utils/redux.dart';
+import 'package:redux/redux.dart' show Store;
 import 'package:shared_preferences/shared_preferences.dart';
-export 'package:hmis/utils/locator.dart';
+import 'package:yaru/yaru.dart';
 
 import 'main.dart';
 
 export 'dart:convert';
 export 'package:flex_color_scheme/flex_color_scheme.dart';
 export 'package:flutter/material.dart' hide State, Router;
-export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter_native_splash/flutter_native_splash.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:go_router/go_router.dart';
-export 'package:hmis/custom_app_bar.dart';
-export 'package:hmis/home/home_page.dart';
-export 'package:hmis/investigations/investigations.dart';
-export 'package:hmis/investigations/investigations_page.dart';
-export 'package:hmis/objectbox.g.dart';
-export 'package:objectbox/objectbox.dart';
-export 'package:hmis/patients/patients.dart';
-export 'package:hmis/patients/add_patient_dialog.dart';
-export 'package:hmis/patients/patient_page.dart';
-export 'package:hmis/patients/patients_page.dart';
-export 'package:hmis/settings/settings_repository.dart';
-export 'package:hmis/settings/settings_page.dart';
+export 'package:hmis/features/home.dart';
+export 'package:hmis/domain/investigation.dart';
+export 'package:hmis/features/investigations.dart';
+export 'package:objectbox/objectbox.dart' hide Store;
+export 'package:hmis/domain/patient.dart';
+export 'package:hmis/features/add_patient_dialog.dart';
+export 'package:hmis/features/case_page.dart';
+export 'package:hmis/features/patients_page.dart';
+export 'package:hmis/features/settings_screen.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 export 'package:path_provider/path_provider.dart';
 
-late Store store;
-late SharedPreferences preferences;
+final navigatorKey = GlobalKey<NavigatorState>();
+
+late Store<Business> store;
 
 void main() async {
   FlutterNativeSplash.preserve(
@@ -50,22 +57,48 @@ void main() async {
   );
 
   final storagePath = storageDirectory.path;
-  store = await openStore(directory: storagePath);
+  objects = await openStore(directory: storagePath);
   preferences = await SharedPreferences.getInstance();
 
-  put(ErRegisterRepository());
-  put(Router());
-  runApp(Application());
+  runApp(
+    StoreProvider(
+      store: store = Store(
+        BusinessReducer(),
+        initialState: Business(),
+        middleware: [
+          LoggingMW(),
+          Navigation(),
+          NativeSplashRemovalMW(),
+          MarksMW(),
+          InvestigationsMW(),
+          SettingsMW(),
+        ],
+      ),
+      child: Application(),
+    ),
+  );
 }
 
-class Application extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+class Application extends UI {
+  const Application({super.key});
 
-    return MaterialApp.router(
+  init() {
+    dispatch(FlutterNativeSplashRemoved());
+  }
+
+  @override
+  Widget build(context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routerConfig: find<Router>().router,
+      navigatorKey: navigatorKey,
+      builder: (_, child) => FTheme(
+        data: state.settings.dark ? FThemes.green.dark.touch : FThemes.green.light.touch,
+        child: child!,
+      ),
+      theme: yaruLight,
+      darkTheme: yaruDark,
+      themeMode: state.settings.dark ? ThemeMode.dark : ThemeMode.light,
+      home: Marksheet(),
     );
   }
 }

@@ -1,10 +1,33 @@
-import 'package:hmis/main.dart';
+import 'package:hmis/domain/services.dart';
 
-mixin CRUD<T> {
-  final box = store.box<T>();
-  late final getAll = box.getAll;
-  late final get = box.get;
-  late final put = box.put;
-  late final removeAll = box.removeAll;
-  late final remove = box.remove;
+/// lets re-implement this crud based system off to redux based
+abstract class ObjectBoxActions {
+  const ObjectBoxActions();
+  void call();
+}
+
+class Put<T> extends ObjectBoxActions {
+  final T object;
+  const Put(this.object);
+  @override
+  void call() {
+    objects.box<T>().put(object);
+  }
+}
+
+class Remove<T> extends ObjectBoxActions {
+  final T any;
+  const Remove(this.any);
+  @override
+  void call() {
+    objects.box<T>().remove((any as dynamic).id);
+  }
+}
+
+class RemoveAll<T> extends ObjectBoxActions {
+  const RemoveAll();
+  @override
+  void call() {
+    objects.box<T>().removeAll();
+  }
 }

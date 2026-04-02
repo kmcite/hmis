@@ -1,7 +1,7 @@
 import '../main.dart';
 
-class AddPatientPage extends StatelessWidget {
-  AddPatientPage({super.key});
+class AddPatientDialog extends StatelessWidget {
+  AddPatientDialog({super.key});
 
   static const name = '/add_patient_dialog';
 

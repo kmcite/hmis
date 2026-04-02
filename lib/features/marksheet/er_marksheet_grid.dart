@@ -1,23 +1,23 @@
-import 'package:hmis/domain/domain.dart';
+import 'package:hmis/domain/er_mark.dart';
 import 'package:hmis/main.dart';
 
-class ErRegisterGrid extends StatelessWidget {
+class ErMarksheetGrid extends StatelessWidget {
   final DateTime date;
   final List<CaseType> rows;
   final List<DutyShift> columns;
 
   /// callbacks (UI → domain)
   final int Function(CaseType row, DutyShift col) countOf;
-  final void Function(CaseType row, DutyShift col) onTapCell;
+  final void Function(CaseType row, DutyShift col) onTapCellToCreateMark;
   final void Function(CaseType row, DutyShift col)? onLongPressCell;
 
-  const ErRegisterGrid({
+  const ErMarksheetGrid({
     super.key,
     required this.date,
     required this.rows,
     required this.columns,
     required this.countOf,
-    required this.onTapCell,
+    required this.onTapCellToCreateMark,
     this.onLongPressCell,
   });
 
@@ -26,7 +26,6 @@ class ErRegisterGrid extends StatelessWidget {
     final columnCount = columns.length + 1; // +1 for row header
     final rowCount = rows.length + 1; // +1 for column header
     final totalCells = columnCount * rowCount;
-
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columnCount,
@@ -39,7 +38,9 @@ class ErRegisterGrid extends StatelessWidget {
 
         // Top-left empty corner
         if (row == 0 && col == 0) {
-          return const SizedBox.shrink();
+          return _HeaderCell(
+            label: 'Shift Type',
+          );
         }
 
         // Column headers
@@ -61,7 +62,7 @@ class ErRegisterGrid extends StatelessWidget {
 
         return _DataCell(
           value: count,
-          onTap: () => onTapCell(type, shift),
+          onTap: () => onTapCellToCreateMark(type, shift),
           onLongPress: onLongPressCell == null
               ? null
               : () => onLongPressCell!(type, shift),
@@ -80,12 +81,19 @@ class _HeaderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      margin: EdgeInsets.all(2),
       padding: const EdgeInsets.all(8),
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onInverseSurface,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -104,17 +112,13 @@ class _DataCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-        ),
+      child: Center(
         child: Text(
           value.toString(),
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
     );

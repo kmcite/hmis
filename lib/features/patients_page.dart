@@ -2,7 +2,6 @@ import 'package:hmis/main.dart';
 
 class PatientsPage extends StatelessWidget {
   const PatientsPage({super.key});
-  static const name = 'patients';
 
   @override
   Widget build(BuildContext context) {

@@ -14,9 +14,9 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'domain/domain.dart';
-import 'investigations/investigations.dart';
-import 'patients/patients.dart';
+import 'domain/er_mark.dart';
+import 'domain/investigation.dart';
+import 'domain/patient.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -96,58 +96,58 @@ final _entities = <obx_int.ModelEntity>[
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
-    id: const obx_int.IdUid(3, 8256106150187910572),
+    id: const obx_int.IdUid(4, 7733026527414952186),
     name: 'ErMark',
-    lastPropertyId: const obx_int.IdUid(8, 4764728743041467332),
+    lastPropertyId: const obx_int.IdUid(8, 1990730875037436030),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(1, 2774845795759767438),
+        id: const obx_int.IdUid(1, 4691694393724531526),
         name: 'id',
         type: 6,
         flags: 1,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 4251147828872193886),
+        id: const obx_int.IdUid(2, 8193471185765151038),
         name: 'date',
         type: 10,
         flags: 8,
-        indexId: const obx_int.IdUid(1, 5736295201799532182),
+        indexId: const obx_int.IdUid(4, 528624065544156075),
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 112231436927397881),
+        id: const obx_int.IdUid(3, 2897401052474381777),
         name: 'shift',
         type: 6,
         flags: 8,
-        indexId: const obx_int.IdUid(2, 6093058829891019382),
+        indexId: const obx_int.IdUid(5, 8356269136101021521),
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 6972151353621539921),
+        id: const obx_int.IdUid(4, 2153750853626274422),
         name: 'caseType',
         type: 6,
         flags: 8,
-        indexId: const obx_int.IdUid(3, 480363263721069933),
+        indexId: const obx_int.IdUid(6, 1133617394548500724),
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(5, 827515613656067262),
+        id: const obx_int.IdUid(5, 94896494461465367),
         name: 'patientName',
         type: 9,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(6, 98714836605012784),
+        id: const obx_int.IdUid(6, 6644975072770106872),
         name: 'ageYears',
         type: 6,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(7, 4997400043049280707),
+        id: const obx_int.IdUid(7, 8312685110328359399),
         name: 'remarks',
         type: 9,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(8, 4764728743041467332),
+        id: const obx_int.IdUid(8, 1990730875037436030),
         name: 'createdAt',
         type: 10,
         flags: 0,
@@ -195,14 +195,28 @@ Future<obx.Store> openStore({
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
+    // If this version is not found, it means that this file was generated
+    // with an older version of the ObjectBox Dart generator.
+    // Please regenerate this file with the current generator version.
+    // Typically, this is done with `dart run build_runner build`.
+    generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(3, 8256106150187910572),
-    lastIndexId: const obx_int.IdUid(3, 480363263721069933),
+    lastEntityId: const obx_int.IdUid(4, 7733026527414952186),
+    lastIndexId: const obx_int.IdUid(6, 1133617394548500724),
     lastRelationId: const obx_int.IdUid(1, 6692188355717474123),
     lastSequenceId: const obx_int.IdUid(0, 0),
-    retiredEntityUids: const [],
+    retiredEntityUids: const [8256106150187910572],
     retiredIndexUids: const [],
-    retiredPropertyUids: const [],
+    retiredPropertyUids: const [
+      2774845795759767438,
+      4251147828872193886,
+      112231436927397881,
+      6972151353621539921,
+      827515613656067262,
+      98714836605012784,
+      4997400043049280707,
+      4764728743041467332,
+    ],
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
