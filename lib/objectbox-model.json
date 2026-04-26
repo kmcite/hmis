@@ -4,145 +4,94 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:8149563269461892823",
-      "lastPropertyId": "5:1318878576037536368",
-      "name": "Patient",
-      "properties": [
-        {
-          "id": "1:1377747672927587755",
-          "name": "id",
-          "type": 6,
-          "flags": 129
-        },
-        {
-          "id": "2:5066266617367521054",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:9054104639275688995",
-          "name": "age",
-          "type": 9
-        },
-        {
-          "id": "4:4372623414988308195",
-          "name": "createdAt",
-          "type": 9
-        },
-        {
-          "id": "5:1318878576037536368",
-          "name": "diagnosis",
-          "type": 9
-        }
-      ],
-      "relations": [
-        {
-          "id": "1:6692188355717474123",
-          "name": "investigations",
-          "targetId": "2:2990477495321148951"
-        }
-      ]
-    },
-    {
-      "id": "2:2990477495321148951",
-      "lastPropertyId": "3:6514375257020923422",
-      "name": "Investigation",
-      "properties": [
-        {
-          "id": "1:1592704029861292345",
-          "name": "id",
-          "type": 6,
-          "flags": 129
-        },
-        {
-          "id": "2:8896191955879536739",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:6514375257020923422",
-          "name": "price",
-          "type": 6
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "4:7733026527414952186",
-      "lastPropertyId": "8:1990730875037436030",
+      "id": "1:9107242456221639524",
+      "lastPropertyId": "8:8750566117250950896",
       "name": "ErMark",
       "properties": [
         {
-          "id": "1:4691694393724531526",
+          "id": "1:1242407081622902188",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:8193471185765151038",
+          "id": "2:6298168001450453680",
           "name": "date",
-          "indexId": "4:528624065544156075",
+          "indexId": "1:2648259274619208320",
           "type": 10,
           "flags": 8
         },
         {
-          "id": "3:2897401052474381777",
+          "id": "3:4440961941601994762",
           "name": "shift",
-          "indexId": "5:8356269136101021521",
+          "indexId": "2:1100823987542823409",
           "type": 6,
           "flags": 8
         },
         {
-          "id": "4:2153750853626274422",
+          "id": "4:2378873535396146673",
           "name": "caseType",
-          "indexId": "6:1133617394548500724",
+          "indexId": "3:2784491969690038386",
           "type": 6,
           "flags": 8
         },
         {
-          "id": "5:94896494461465367",
+          "id": "5:6847488618662874106",
           "name": "patientName",
           "type": 9
         },
         {
-          "id": "6:6644975072770106872",
+          "id": "6:1584877198907618881",
           "name": "ageYears",
           "type": 6
         },
         {
-          "id": "7:8312685110328359399",
+          "id": "7:3863469336149467927",
           "name": "remarks",
           "type": 9
         },
         {
-          "id": "8:1990730875037436030",
+          "id": "8:8750566117250950896",
           "name": "createdAt",
           "type": 10
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:1632380097378122196",
+      "lastPropertyId": "3:2217868057989587760",
+      "name": "Investigation",
+      "properties": [
+        {
+          "id": "1:112321924687017534",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:3578113801953495654",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2217868057989587760",
+          "name": "price",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:7733026527414952186",
-  "lastIndexId": "6:1133617394548500724",
-  "lastRelationId": "1:6692188355717474123",
+  "lastEntityId": "2:1632380097378122196",
+  "lastIndexId": "3:2784491969690038386",
+  "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [
-    8256106150187910572
-  ],
+  "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [
-    2774845795759767438,
-    4251147828872193886,
-    112231436927397881,
-    6972151353621539921,
-    827515613656067262,
-    98714836605012784,
-    4997400043049280707,
-    4764728743041467332
-  ],
+  "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1
 }
