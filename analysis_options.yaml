@@ -1,5 +1,15 @@
 analyzer:
   errors:
     deprecated_member_use: ignore
+    unused_element: ignore
+    unused_element_parameter: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 formatter:
   trailing_commas: preserve

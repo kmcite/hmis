@@ -1,36 +1,31 @@
 name: hmis
 description: A new Flutter project.
 publish_to: "none"
-version: 0.1.1
+version: 0.1.11
 
 environment:
-  sdk: ^3.10.4
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
     sdk: flutter
-  # font_awesome_flutter: ^11.0.0
-  # flutter_native_splash: ^2.4.1
   cupertino_icons: ^1.0.8
-  objectbox: ^5.3.1
-  objectbox_flutter_libs: ^5.3.1
   path_provider: ^2.1.5
   path: ^1.9.0
   package_info_plus: ^10.1.0
   shared_preferences: ^2.3.5
   intl: ^0.20.2
-  equatable: ^2.0.5
-  flutter_bloc: ^9.1.1
-  # forui: ^0.20.0
-  # faker: ^2.2.0
-  # yaru: ^10.0.0
-  # flutter_redux: ^0.10.0
-  # redux: ^5.0.0
-dev_dependencies:
-#   freezed:
-  objectbox_generator: ^5.3.1
-  build_runner: ^2.13.1
-#   json_serializable: ^6.7.1
+  manager:
+    path:
+      ..//manager
+  signals:
+    path:
+      ..//signals
+  navigation:
+    path:
+      ..//navigation
+  pocketbase: ^0.25.0
+  fossui: ^0.1.1
 flutter:
   uses-material-design: true
   # assets:
