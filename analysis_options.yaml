@@ -35,13 +35,6 @@ analyzer:
     - lib/ui/theme/**
     - lib/ui/widgets/**
     - lib/ui/liquid/**
-    # Widgets copied to ui/home/ or ui/marksheet/ root (canonical: */components/)
-    - lib/ui/home/home_case_type_breakdown.dart
-    - lib/ui/home/home_quick_actions.dart
-    - lib/ui/home/home_recent_patients.dart
-    - lib/ui/home/home_today_dashboard.dart
-    - lib/ui/home/home_context_header.dart
-    - lib/ui/home/home_shift_utils.dart
     - lib/ui/marksheet/datebar.dart
     - lib/ui/marksheet/er_marksheet_grid.dart
 formatter:
