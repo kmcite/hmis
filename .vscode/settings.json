@@ -1,0 +1,28 @@
+{
+  "dart.analysisExcludedFolders": [
+    "lib/business/presentation",
+    "lib/cubits",
+    "lib/controllers",
+    "lib/features",
+    "lib/data",
+    "lib/models",
+    "lib/repositories",
+    "lib/sync",
+    "lib/di",
+    "lib/liquid",
+    "lib/utils/liquid",
+    "lib/domain/data",
+    "lib/domain/sync",
+    "lib/domain/time",
+    "lib/domain/repository",
+    "lib/ui/screens",
+    "lib/ui/dialogs",
+    "lib/ui/er_case_register",
+    "lib/ui/chit",
+    "lib/ui/pocketbase_gate",
+    "lib/ui/shell",
+    "lib/ui/theme",
+    "lib/ui/widgets",
+    "lib/ui/liquid"
+  ]
+}
