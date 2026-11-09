@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="HMIS">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18BFBF"/>
+      <stop offset="55%" stop-color="#0D6E6E"/>
+      <stop offset="100%" stop-color="#084848"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <rect x="32" y="32" width="960" height="220" rx="180" fill="url(#shine)"/>
+  <path fill="#E6FFFE" d="M416 272h192v160h160v192H608v160H416V624H256V432h160z"/>
+  <path fill="#063A3A" fill-opacity="0.32" d="M448 304h128v128h128v64H576v128H448V536H320v-64h128z"/>
+</svg>

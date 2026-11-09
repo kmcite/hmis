@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:hmis/controllers/configuration.dart';
-import 'package:hmis/ui/pocketbase_gate/pocketbase.dart';
-import 'package:hmis/utils/router.dart';
-import 'package:signals/signals.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hmis/business/configuration_cubit.dart';
+import 'package:hmis/domain/repositories/hmis_local_store.dart';
+import 'package:hmis/utils/dependencies_scope.dart';
+import 'package:hmis/ui/home/home_screen.dart';
+import 'package:hmis/ui/shared/theme/hmis_theme.dart';
+import 'package:hmis/ui/shared/liquid/liquid.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final localStore = await HmisLocalStore.open();
   runApp(
-    RouterScope(
-      router: router,
-      child: const ProviderScope(
-        child: PocketBaseGate(child: Application()),
-      ),
+    DependenciesScope(
+      localStore: localStore,
+      child: const Application(),
     ),
   );
 }
 
-class Application extends SignalConsumer {
+class Application extends StatelessWidget {
   const Application({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: context.router,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Maple Mono'),
-      darkTheme: ThemeData(
-        fontFamily: 'Maple Mono',
-        brightness: Brightness.dark,
-      ),
-      themeMode: configuration(context).themeMode(),
+    return BlocBuilder<ConfigurationCubit, ConfigurationState>(
+      builder: (context, config) {
+        return MaterialApp(
+          title: 'HMIS',
+          home: const HomeScreen(),
+          debugShowCheckedModeBanner: false,
+          theme: HmisTheme.light(),
+          darkTheme: HmisTheme.dark(),
+          themeMode: config.themeMode,
+          builder: (context, child) => LiquidCanvas(child: child!),
+        );
+      },
     );
   }
 }

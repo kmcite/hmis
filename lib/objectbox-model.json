@@ -1,0 +1,175 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:629894299689077151",
+      "lastPropertyId": "14:3347578381361480785",
+      "name": "MarkEntity",
+      "properties": [
+        {
+          "id": "1:6269630747334600492",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9168067650731209906",
+          "name": "clientId",
+          "indexId": "1:2832604305416845594",
+          "type": 9,
+          "flags": 2080
+        },
+        {
+          "id": "3:1229542267250296541",
+          "name": "remoteId",
+          "indexId": "2:7502719928449624402",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "4:869938739835743748",
+          "name": "sheetDateYmd",
+          "indexId": "3:4071908831082058729",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "5:7245105459511969131",
+          "name": "dateMs",
+          "type": 6
+        },
+        {
+          "id": "6:1005574663506176593",
+          "name": "shift",
+          "type": 9
+        },
+        {
+          "id": "7:6177442051991827287",
+          "name": "caseType",
+          "type": 9
+        },
+        {
+          "id": "8:918344581435526171",
+          "name": "patientName",
+          "type": 9
+        },
+        {
+          "id": "9:7164047405650745163",
+          "name": "ageYears",
+          "type": 6
+        },
+        {
+          "id": "10:5430340901042807104",
+          "name": "sexCode",
+          "type": 6
+        },
+        {
+          "id": "11:2245693691356952015",
+          "name": "remarks",
+          "type": 9
+        },
+        {
+          "id": "12:5012485990452555887",
+          "name": "createdAtMs",
+          "type": 6
+        },
+        {
+          "id": "13:1188773634775893332",
+          "name": "updatedAtMs",
+          "type": 6
+        },
+        {
+          "id": "14:3347578381361480785",
+          "name": "isDeleted",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:6373511351300142162",
+      "lastPropertyId": "7:6033704369449724073",
+      "name": "OutboxEntry",
+      "properties": [
+        {
+          "id": "1:4961576045236837760",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5812671596858818508",
+          "name": "entityClientId",
+          "indexId": "4:1973067155180247897",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "3:2155827192967507136",
+          "name": "operation",
+          "type": 9
+        },
+        {
+          "id": "4:775049473511630573",
+          "name": "status",
+          "type": 6
+        },
+        {
+          "id": "5:5348174409713996788",
+          "name": "createdAtMs",
+          "type": 6
+        },
+        {
+          "id": "6:3799489947090913261",
+          "name": "attemptCount",
+          "type": 6
+        },
+        {
+          "id": "7:6033704369449724073",
+          "name": "lastError",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8140840598125205865",
+      "lastPropertyId": "3:2994494525209389656",
+      "name": "SyncMetaEntity",
+      "properties": [
+        {
+          "id": "1:7278785318102434557",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1005282035929463232",
+          "name": "key",
+          "indexId": "5:7347529987562736705",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:2994494525209389656",
+          "name": "value",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:8140840598125205865",
+  "lastIndexId": "5:7347529987562736705",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
