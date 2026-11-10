@@ -13,20 +13,20 @@ analyzer:
     - lib/cubits/**
     - lib/controllers/**
     - lib/features/**
-    - lib/data/**
-    - lib/models/**
-    - lib/repositories/**
+    # lib/data — thin legacy export barrels only (on disk)
+    # lib/models — thin legacy export barrels only (on disk)
+    # lib/repositories — thin legacy export barrels only (on disk)
     - lib/sync/**
-    - lib/di/**
+    # lib/di — thin legacy export barrels only (on disk)
     - lib/liquid/**
     - lib/utils/liquid/**
-    - lib/utils/ids.dart
+    # lib/utils/ids.dart — legacy export barrel (on disk)
     - lib/utils/router.dart
     - lib/domain/data/**
     - lib/domain/sync/**
     - lib/domain/time/**
     - lib/domain/repository/**
-    - lib/ui/screens/**
+    # lib/ui/screens — thin legacy export barrels only (on disk)
     - lib/ui/dialogs/**
     - lib/ui/er_case_register/**
     - lib/ui/chit/**

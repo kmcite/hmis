@@ -1,0 +1,17 @@
+---
+description: HMIS stale IDE Problems / deleted-path diagnostics
+globs:
+alwaysApply: false
+---
+
+# Ghost diagnostics sweep
+
+When the user says **"Ghost diagnostics sweep"** (or IDE shows errors on moved/deleted paths while `dart analyze lib` is clean):
+
+1. Add or refresh **thin `library; export 'package:hmis/...';` barrels** at legacy URIs still referenced by stale tabs.
+2. **Stop excluding** those folders in `analysis_options.yaml` and `.vscode/settings.json` `dart.analysisExcludedFolders` when they only contain shims.
+3. Keep excluding true dead trees (`lib/ui/er_case_register`, `lib/controllers`, `lib/cubits`, ghost `lib/utils/router.dart`, etc.) — no shim unless a specific URI is reported.
+4. Run `dart analyze lib`. Do **not** commit unless the user asks.
+5. Tell the user: **Dart: Restart Analysis Server** and **Revert File** on tabs with unsaved pre-refactor content.
+
+Canonical roots: `domain/models`, `domain/repositories`, `services`, `business`, `ui/<feature>/`.
