@@ -13,7 +13,6 @@ class LiquidSelectableTile extends StatelessWidget {
     this.icon,
     this.tint,
     this.radius = 14,
-    this.specular = false,
     this.padding = const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
   });
 
@@ -23,7 +22,6 @@ class LiquidSelectableTile extends StatelessWidget {
   final IconData? icon;
   final Color? tint;
   final double radius;
-  final bool specular;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -38,10 +36,10 @@ class LiquidSelectableTile extends StatelessWidget {
       tint: accent,
       selected: selected,
       radius: radius,
-      specular: specular,
       padding: padding,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null) ...[
             Icon(
@@ -54,6 +52,8 @@ class LiquidSelectableTile extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: icon != null ? 12 : 11,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,

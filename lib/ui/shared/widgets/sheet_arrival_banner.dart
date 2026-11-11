@@ -9,12 +9,12 @@ import 'package:intl/intl.dart';
 class SheetArrivalBanner extends StatefulWidget {
   const SheetArrivalBanner({
     super.key,
-    required this.mark,
+    required this.patient,
     this.compact = false,
     this.liveClock = false,
   });
 
-  final Mark mark;
+  final Patient patient;
   final bool compact;
   /// Updates arrival/shift preview while composing a new chit.
   final bool liveClock;
@@ -47,7 +47,7 @@ class _SheetArrivalBannerState extends State<SheetArrivalBanner> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final arrival = widget.liveClock ? _now : widget.mark.effectiveArrival();
+    final arrival = widget.liveClock ? _now : widget.patient.effectiveArrival();
     final sheet = HospitalTime.sheetDateFor(arrival);
     final shift = HospitalTime.shiftFor(arrival);
     final distinct = HospitalTime.sheetDiffersFromArrival(
@@ -56,7 +56,6 @@ class _SheetArrivalBannerState extends State<SheetArrivalBanner> {
     );
 
     return LiquidCard(
-      specular: false,
       padding: EdgeInsets.all(widget.compact ? 12 : 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +117,6 @@ class _SheetArrivalBannerState extends State<SheetArrivalBanner> {
             LiquidSurface(
               variant: LiquidVariant.accent,
               tint: cs.tertiary,
-              specular: false,
               radius: 12,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
@@ -199,14 +197,14 @@ class _InfoLine extends StatelessWidget {
 }
 
 /// Inline chips for register / recent rows.
-class MarkDateChips extends StatelessWidget {
-  const MarkDateChips({super.key, required this.mark});
+class PatientDateChips extends StatelessWidget {
+  const PatientDateChips({super.key, required this.patient});
 
-  final Mark mark;
+  final Patient patient;
 
   @override
   Widget build(BuildContext context) {
-    if (!mark.hasDistinctArrivalDay || mark.arrivalAt == null) {
+    if (!patient.hasDistinctArrivalDay || patient.arrivalAt == null) {
       return const SizedBox.shrink();
     }
     final cs = Theme.of(context).colorScheme;
@@ -215,12 +213,12 @@ class MarkDateChips extends StatelessWidget {
       runSpacing: 4,
       children: [
         LiquidChip(
-          label: 'Sheet ${DateFormat('d/M').format(mark.sheetDate)}',
+          label: 'Sheet ${DateFormat('d/M').format(patient.sheetDate)}',
           dense: true,
           tint: cs.primary,
         ),
         LiquidChip(
-          label: 'Arrived ${DateFormat('d/M HH:mm').format(mark.arrivalAt!)}',
+          label: 'Arrived ${DateFormat('d/M HH:mm').format(patient.arrivalAt!)}',
           dense: true,
           tint: cs.tertiary,
         ),

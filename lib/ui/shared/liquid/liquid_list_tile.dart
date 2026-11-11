@@ -32,7 +32,6 @@ class LiquidListTile extends StatelessWidget {
       onTap: onTap,
       variant: variant,
       tint: tint,
-      specular: false,
       padding: EdgeInsets.symmetric(
         horizontal: 14,
         vertical: dense ? 10 : 14,

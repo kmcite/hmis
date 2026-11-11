@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hmis/business/configuration_cubit.dart';
-import 'package:hmis/domain/repositories/hmis_local_store.dart';
 import 'package:hmis/utils/dependencies_scope.dart';
 import 'package:hmis/ui/home/home_screen.dart';
 import 'package:hmis/ui/shared/theme/hmis_theme.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
+import 'package:shared_database/shared_database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final localStore = await HmisLocalStore.open();
+  final database = await SharedDatabase.open();
   runApp(
     DependenciesScope(
-      localStore: localStore,
+      database: database,
       child: const Application(),
     ),
   );

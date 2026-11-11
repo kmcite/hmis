@@ -15,52 +15,55 @@ class HomeQuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    return Row(
-      spacing: 10,
-      children: [
-        Expanded(
-          flex: 11,
-          child: _ActionTile(
-            icon: CupertinoIcons.plus_square_fill,
-            label: 'New chit',
-            subtitle: 'Record case',
-            variant: LiquidVariant.hero,
-            tint: cs.primary,
-            onTap: () {
-              context.read<NewChitCubit>().init();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const NewChitScreen()),
-              );
-            },
-          ),
-        ),
-        Expanded(
-          flex: 10,
-          child: _ActionTile(
-            icon: CupertinoIcons.table_fill,
-            label: 'Marksheet',
-            subtitle: 'Daily grid',
-            variant: LiquidVariant.accent,
-            tint: cs.tertiary,
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const MarksheetScreen()),
+    return IntrinsicHeight(
+      child: Row(
+        spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 11,
+            child: _ActionTile(
+              icon: CupertinoIcons.plus_square_fill,
+              label: 'New chit',
+              subtitle: 'Record case',
+              variant: LiquidVariant.hero,
+              tint: cs.primary,
+              onTap: () {
+                context.read<NewChitCubit>().init();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const NewChitScreen()),
+                );
+              },
             ),
           ),
-        ),
-        Expanded(
-          flex: 10,
-          child: _ActionTile(
-            icon: CupertinoIcons.tray_full_fill,
-            label: 'Register',
-            subtitle: 'All cases',
-            variant: LiquidVariant.accent,
-            tint: cs.secondary,
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CaseRegisterScreen()),
+          Expanded(
+            flex: 10,
+            child: _ActionTile(
+              icon: CupertinoIcons.table_fill,
+              label: 'Marksheet',
+              subtitle: 'Daily grid',
+              variant: LiquidVariant.accent,
+              tint: cs.tertiary,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const MarksheetScreen()),
+              ),
             ),
           ),
-        ),
-      ],
+          Expanded(
+            flex: 10,
+            child: _ActionTile(
+              icon: CupertinoIcons.tray_full_fill,
+              label: 'Register',
+              subtitle: 'All cases',
+              variant: LiquidVariant.accent,
+              tint: cs.secondary,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CaseRegisterScreen()),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -85,9 +88,7 @@ class _ActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onHero = variant == LiquidVariant.hero;
-    final fg = onHero
-        ? Theme.of(context).colorScheme.onPrimary
-        : tint;
+    final fg = onHero ? Theme.of(context).colorScheme.onPrimary : tint;
 
     return LiquidSurface(
       onTap: onTap,

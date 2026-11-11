@@ -1,4 +1,4 @@
-/// Visual depth roles for liquid surfaces (gradient + specular edge, no blur).
+/// Visual depth roles for liquid surfaces (flat tint + border + shadow).
 enum LiquidVariant {
   /// Default panel on the canvas.
   surface,

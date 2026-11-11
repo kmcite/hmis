@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'liquid_decoration.dart';
-import 'liquid_specular.dart';
 import 'liquid_theme.dart';
 import 'liquid_variant.dart';
 
-/// Primary building block: a tinted, specular-trimmed container.
+/// Primary building block: a tinted container.
 class LiquidSurface extends StatelessWidget {
   const LiquidSurface({
     super.key,
@@ -18,7 +17,6 @@ class LiquidSurface extends StatelessWidget {
     this.tint,
     this.radius,
     this.selected = false,
-    this.specular,
     this.clipBehavior = Clip.antiAlias,
     this.semanticLabel,
   });
@@ -32,7 +30,6 @@ class LiquidSurface extends StatelessWidget {
   final Color? tint;
   final double? radius;
   final bool selected;
-  final bool? specular;
   final Clip clipBehavior;
   final String? semanticLabel;
 
@@ -40,7 +37,6 @@ class LiquidSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = LiquidThemeData.of(context);
     final effectiveRadius = radius ?? theme.defaultRadius;
-    final showSpecular = specular ?? theme.specularEnabled;
 
     final decoration = liquidDecoration(
       context,
@@ -50,36 +46,40 @@ class LiquidSurface extends StatelessWidget {
       selected: selected,
     );
 
-    Widget core = DecoratedBox(
-      decoration: decoration,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          if (showSpecular)
-            LiquidSpecular(radius: effectiveRadius, variant: variant),
-          Padding(padding: padding ?? EdgeInsets.zero, child: child),
-        ],
-      ),
-    );
-
-    if (margin != null) {
-      core = Padding(padding: margin!, child: core);
-    }
-
+    Widget core;
     if (onTap != null || onLongPress != null) {
-      return Semantics(
+      // Ink paints the decoration onto the Material so the InkWell splash
+      // renders consistently above every variant (opaque or tinted).
+      core = Semantics(
         button: onTap != null,
         label: semanticLabel,
         child: Material(
           color: Colors.transparent,
+          borderRadius: BorderRadius.circular(effectiveRadius),
+          clipBehavior: clipBehavior,
           child: InkWell(
             onTap: onTap,
             onLongPress: onLongPress,
             borderRadius: BorderRadius.circular(effectiveRadius),
-            child: core,
+            child: Ink(
+              decoration: decoration,
+              child: Padding(
+                padding: padding ?? EdgeInsets.zero,
+                child: child,
+              ),
+            ),
           ),
         ),
       );
+    } else {
+      core = DecoratedBox(
+        decoration: decoration,
+        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
+      );
+    }
+
+    if (margin != null) {
+      core = Padding(padding: margin!, child: core);
     }
     return core;
   }

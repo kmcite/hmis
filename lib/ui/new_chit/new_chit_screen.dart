@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hmis/business/er_mark_draft_cubit.dart';
+import 'package:hmis/business/patient_draft_cubit.dart';
 import 'package:hmis/business/new_chit_cubit.dart';
 import 'package:hmis/domain/models/models.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
@@ -27,7 +27,7 @@ class _NewChitScreenBodyState extends State<_NewChitScreenBody> {
     super.didChangeDependencies();
     if (!_initialized) {
       _initialized = true;
-      final editing = context.read<ErMarkDraftCubit>().state.selectedId != null;
+      final editing = context.read<PatientDraftCubit>().state.selectedId != null;
       if (!editing) {
         context.read<NewChitCubit>().init();
       }
@@ -36,12 +36,12 @@ class _NewChitScreenBodyState extends State<_NewChitScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    final editing = context.watch<ErMarkDraftCubit>().state.selectedId != null;
-    final mark = editing
-        ? context.watch<ErMarkDraftCubit>().state.draft
-        : context.watch<NewChitCubit>().state.mark;
+    final editing = context.watch<PatientDraftCubit>().state.selectedId != null;
+    final patient = editing
+        ? context.watch<PatientDraftCubit>().state.draft
+        : context.watch<NewChitCubit>().state.patient;
 
-    return mark == null
+    return patient == null
         ? const LiquidScaffold(
             body: LiquidProgress(message: 'Preparing form…'),
           )
@@ -56,13 +56,14 @@ class _NewChitScreenBodyState extends State<_NewChitScreenBody> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 spacing: 16,
                 children: [
-                  SheetArrivalBanner(mark: mark, liveClock: !editing && !mark.isPersisted),
-                  _PatientCard(erMark: mark, editing: editing),
-                  _CaseTypeGrid(erMark: mark, editing: editing),
+                  SheetArrivalBanner(patient: patient, liveClock: !editing && !patient.isPersisted),
+                  _PatientCard(patient: patient, editing: editing),
+                  _ClinicalCard(patient: patient, editing: editing),
+                  _CaseTypeGrid(patient: patient, editing: editing),
                 ],
               ),
             ),
-            bottomNavigationBar: _ActionBar(erMark: mark, editing: editing),
+            bottomNavigationBar: _ActionBar(patient: patient, editing: editing),
           );
   }
 }
@@ -70,14 +71,14 @@ class _NewChitScreenBodyState extends State<_NewChitScreenBody> {
 // ── Patient Info ─────────────────────────────────────────────────────────
 
 class _PatientCard extends StatelessWidget {
-  final Mark erMark;
+  final Patient patient;
   final bool editing;
-  const _PatientCard({required this.erMark, required this.editing});
+  const _PatientCard({required this.patient, required this.editing});
 
   @override
   Widget build(BuildContext context) {
     final newChit = context.read<NewChitCubit>();
-    final draft = context.read<ErMarkDraftCubit>();
+    final draft = context.read<PatientDraftCubit>();
     return LiquidCard(
       radius: 20,
       padding: const EdgeInsets.all(16),
@@ -95,17 +96,17 @@ class _PatientCard extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: LiquidTextField(
-                  key: ValueKey('name-${erMark.id}'),
+                  key: ValueKey('name-${patient.id}'),
                   label: 'Name',
-                  initialValue: erMark.patientName ?? '',
+                  initialValue: patient.patientName ?? '',
                   onChanged: editing ? draft.editName : newChit.onPatientName,
                 ),
               ),
               Expanded(
                 child: LiquidTextField(
-                  key: ValueKey('age-${erMark.id}'),
+                  key: ValueKey('age-${patient.id}'),
                   label: 'Age',
-                  initialValue: erMark.ageYears?.toString() ?? '',
+                  initialValue: patient.ageYears?.toString() ?? '',
                   onChanged: editing ? draft.editAge : newChit.onAgeInYears,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
@@ -113,14 +114,146 @@ class _PatientCard extends StatelessWidget {
               ),
             ],
           ),
-          LiquidTextField(
-            key: ValueKey('remarks-${erMark.id}'),
+          Row(
+            spacing: 10,
+            children: [
+              const SizedBox(
+                width: 44,
+                child: Text(
+                  'SEX',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _GenderSegment(
+                  label: 'M',
+                  icon: Icons.male,
+                  selected: patient.isMale == true,
+                  onTap: () => _setGender(context, patient, true),
+                ),
+              ),
+              Expanded(
+                child: _GenderSegment(
+                  label: 'F',
+                  icon: Icons.female,
+                  selected: patient.isMale == false,
+                  onTap: () => _setGender(context, patient, false),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _setGender(BuildContext context, Patient patient, bool value) {
+    // Tapping the active segment clears the selection (unknown sex).
+    final next = patient.isMale == value ? null : value;
+    final editing = context.read<PatientDraftCubit>().state.selectedId != null;
+    if (editing) {
+      context.read<PatientDraftCubit>().editGender(next);
+    } else {
+      context.read<NewChitCubit>().onIsMale(next);
+    }
+  }
+}
+
+class _GenderSegment extends StatelessWidget {
+  const _GenderSegment({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final fg = selected ? cs.primary : cs.onSurfaceVariant;
+    return LiquidSurface(
+      onTap: onTap,
+      variant: selected ? LiquidVariant.accent : LiquidVariant.inset,
+      tint: cs.primary,
+      selected: selected,
+      radius: 12,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 6,
+        children: [
+          Icon(icon, size: 18, color: fg),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: fg,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Clinical Notes ───────────────────────────────────────────────────────
+
+class _ClinicalCard extends StatelessWidget {
+  final Patient patient;
+  final bool editing;
+  const _ClinicalCard({required this.patient, required this.editing});
+
+  @override
+  Widget build(BuildContext context) {
+    final newChit = context.read<NewChitCubit>();
+    final draft = context.read<PatientDraftCubit>();
+    return LiquidCard(
+      radius: 20,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 12,
+        children: [
+          const LiquidSectionHeader(
+            icon: Icons.assignment_outlined,
             label: 'Clinical notes',
-            hint: 'Presentation, plan, handover…',
-            initialValue: erMark.remarks ?? '',
-            onChanged: editing ? draft.editRemarks : newChit.onRemarks,
-            minLines: 5,
-            maxLines: 12,
+          ),
+          LiquidTextField(
+            key: ValueKey('history-${patient.id}'),
+            label: 'Hx — history taking',
+            hint: 'Chief complaint, history…',
+            initialValue: patient.history ?? '',
+            onChanged: editing ? draft.editHistory : newChit.onHistory,
+            minLines: 3,
+            maxLines: 8,
+          ),
+          LiquidTextField(
+            key: ValueKey('exam-${patient.id}'),
+            label: 'O/E — on examination',
+            hint: 'Findings…',
+            initialValue: patient.examination ?? '',
+            onChanged: editing ? draft.editExamination : newChit.onExamination,
+            minLines: 3,
+            maxLines: 8,
+          ),
+          LiquidTextField(
+            key: ValueKey('mgmt-${patient.id}'),
+            label: 'Management',
+            hint: 'Plan, investigations, referrals…',
+            initialValue: patient.management ?? '',
+            onChanged: editing ? draft.editManagement : newChit.onManagement,
+            minLines: 3,
+            maxLines: 8,
           ),
         ],
       ),
@@ -131,16 +264,14 @@ class _PatientCard extends StatelessWidget {
 // ── Case Type ───────────────────────────────────────────────────────────
 
 class _CaseTypeGrid extends StatelessWidget {
-  final Mark erMark;
+  final Patient patient;
   final bool editing;
-  const _CaseTypeGrid({required this.erMark, required this.editing});
+  const _CaseTypeGrid({required this.patient, required this.editing});
 
   static const _icons = {
     CaseType.medical: Icons.local_hospital,
     CaseType.surgical: Icons.medical_services,
     CaseType.pediatrics: Icons.child_care,
-    CaseType.minorOt: Icons.healing,
-    CaseType.rta: Icons.directions_car,
     CaseType.dogBite: Icons.pets,
     CaseType.mlc: Icons.gavel,
     CaseType.postmortem: Icons.science,
@@ -149,7 +280,7 @@ class _CaseTypeGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final newChit = context.read<NewChitCubit>();
-    final draft = context.read<ErMarkDraftCubit>();
+    final draft = context.read<PatientDraftCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
@@ -167,7 +298,7 @@ class _CaseTypeGrid extends StatelessWidget {
           itemCount: CaseType.values.length,
           itemBuilder: (_, i) {
             final ct = CaseType.values[i];
-            final selected = ct == erMark.caseType;
+            final selected = ct == patient.caseType;
             return LiquidSelectableTile(
               icon: _icons[ct] ?? Icons.circle,
               label: ct.label,
@@ -186,18 +317,18 @@ class _CaseTypeGrid extends StatelessWidget {
 // ── Bottom Action Bar ──────────────────────────────────────────────────
 
 class _ActionBar extends StatelessWidget {
-  final Mark erMark;
+  final Patient patient;
   final bool editing;
-  const _ActionBar({required this.erMark, required this.editing});
+  const _ActionBar({required this.patient, required this.editing});
 
   @override
   Widget build(BuildContext context) {
     final newChit = context.read<NewChitCubit>();
-    final draftCubit = context.read<ErMarkDraftCubit>();
-    final draftState = context.watch<ErMarkDraftCubit>().state;
+    final draftCubit = context.read<PatientDraftCubit>();
+    final draftState = context.watch<PatientDraftCubit>().state;
     final canSave = editing
         ? draftState.canSave
-        : (erMark.patientName ?? '').trim().isNotEmpty;
+        : (patient.patientName ?? '').trim().isNotEmpty;
 
     Future<void> save() async {
       if (!canSave) return;
@@ -220,7 +351,6 @@ class _ActionBar extends StatelessWidget {
       child: LiquidSurface(
         variant: LiquidVariant.elevated,
         radius: 0,
-        specular: false,
         margin: const EdgeInsets.only(top: 4),
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
         child: Row(

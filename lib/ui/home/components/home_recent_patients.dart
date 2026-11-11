@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hmis/business/er_mark_draft_cubit.dart';
 import 'package:hmis/business/home_cubit.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
 import 'package:hmis/domain/models/models.dart';
-import 'package:hmis/ui/new_chit/new_chit_screen.dart';
+import 'package:hmis/ui/patient/patient_details_screen.dart';
 import 'package:hmis/ui/shared/widgets/sheet_arrival_banner.dart';
 import 'package:intl/intl.dart';
 
@@ -44,7 +43,6 @@ class HomeRecentPatients extends StatelessWidget {
           const LiquidProgress(message: 'Loading activity…')
         else if (recent.isEmpty)
           LiquidCard(
-            specular: false,
             padding: const EdgeInsets.all(22),
             child: Column(
               children: [
@@ -67,7 +65,7 @@ class HomeRecentPatients extends StatelessWidget {
           Column(
             children: [
               for (var i = 0; i < recent.length; i++) ...[
-                _RecentRow(mark: recent[i]),
+                _RecentRow(patient: recent[i]),
                 if (i < recent.length - 1) const SizedBox(height: 8),
               ],
             ],
@@ -78,36 +76,37 @@ class HomeRecentPatients extends StatelessWidget {
 }
 
 class _RecentRow extends StatelessWidget {
-  const _RecentRow({required this.mark});
+  const _RecentRow({required this.patient});
 
-  final Mark mark;
+  final Patient patient;
 
   void _open(BuildContext context) {
-    context.read<ErMarkDraftCubit>().open(mark.id);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const NewChitScreen()),
+      MaterialPageRoute(
+        builder: (_) => PatientDetailsScreen(patientId: patient.id),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = mark.caseType.color;
+    final color = patient.caseType.color;
     final cs = Theme.of(context).colorScheme;
-    final time = mark.createdAt;
+    final time = patient.createdAt;
 
     return LiquidListTile(
       onTap: () => _open(context),
-      leading: Icon(mark.caseType.icon, size: 22),
-      title: Text(mark.patientName!),
+      leading: Icon(patient.caseType.icon, size: 22),
+      title: Text(patient.patientName!),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${mark.caseType.label} · ${mark.shift.label}'
-            '${mark.ageYears != null ? ' · ${mark.ageYears} yrs' : ''}',
+            '${patient.caseType.label} · ${patient.shift.label}'
+            '${patient.ageYears != null ? ' · ${patient.ageYears} yrs' : ''}',
           ),
           const SizedBox(height: 4),
-          MarkDateChips(mark: mark),
+          PatientDateChips(patient: patient),
         ],
       ),
       trailing: time == null

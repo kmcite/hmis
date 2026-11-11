@@ -13,7 +13,6 @@ class LiquidCard extends StatelessWidget {
     this.variant = LiquidVariant.elevated,
     this.tint,
     this.radius,
-    this.specular,
   });
 
   final Widget child;
@@ -23,7 +22,6 @@ class LiquidCard extends StatelessWidget {
   final LiquidVariant variant;
   final Color? tint;
   final double? radius;
-  final bool? specular;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,6 @@ class LiquidCard extends StatelessWidget {
       radius: radius,
       margin: margin,
       padding: padding,
-      specular: specular,
       child: child,
     );
   }

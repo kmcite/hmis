@@ -4,88 +4,63 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hmis/business/case_filter_cubit.dart';
 import 'package:hmis/business/case_register_cubit.dart';
 import 'package:hmis/business/configuration_cubit.dart';
-import 'package:hmis/business/er_mark_draft_cubit.dart';
+import 'package:hmis/business/patient_draft_cubit.dart';
 import 'package:hmis/business/home_cubit.dart';
 import 'package:hmis/business/new_chit_cubit.dart';
-import 'package:hmis/business/sync_connection_cubit.dart';
 import 'package:hmis/business/sheet_cubit.dart';
-import 'package:hmis/business/sync_cubit.dart';
-import 'package:hmis/domain/repositories/hmis_local_store.dart';
-import 'package:hmis/domain/repositories/marks_repository.dart';
-import 'package:hmis/domain/repositories/sync_repository.dart';
-import 'package:hmis/services/pocketbase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hmis/domain/repositories/app_settings_store.dart';
+import 'package:hmis/domain/repositories/patients_repository.dart';
+import 'package:shared_database/shared_database.dart';
 
 /// Composition root — wires layers top-down:
 ///
 /// **services** → **domain** → **business** (cubits) → **ui** (screens).
 ///
-/// Data flows: UI event → cubit → repository → local/sync → cubit state → UI.
+/// Data flows: UI event → cubit → repository → shared database → cubit state → UI.
 class DependenciesScope extends StatelessWidget {
   const DependenciesScope({
     super.key,
-    required this.localStore,
+    required this.database,
     required this.child,
   });
 
-  final HmisLocalStore localStore;
+  final SharedDatabase database;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<HmisLocalStore>.value(value: localStore),
-        RepositoryProvider<PocketBaseService>(
-          create: (_) => PocketBaseService(),
-          dispose: (service) => service.dispose(),
+        RepositoryProvider<SharedDatabase>.value(value: database),
+        RepositoryProvider<AppSettingsStore>(
+          create: (_) => AppSettingsStore(database),
         ),
-        RepositoryProvider<MarksRepository>(
-          create: (_) => MarksRepository(localStore),
+        RepositoryProvider<PatientsRepository>(
+          create: (_) => PatientsRepository(database),
           dispose: (repo) => repo.dispose(),
-        ),
-        RepositoryProvider<SyncRepository>(
-          create: (c) => SyncRepository(
-            localStore,
-            c.read<MarksRepository>(),
-          ),
-          dispose: (sync) => sync.dispose(),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) =>
-                ConfigurationCubit(SharedPreferencesAsync())..initialize(),
-          ),
-          BlocProvider(
-            create: (c) => SyncCubit(
-              c.read<SyncRepository>(),
-              c.read<PocketBaseService>(),
-              c.read<MarksRepository>(),
-            ),
+            create: (c) =>
+                ConfigurationCubit(c.read<AppSettingsStore>())..initialize(),
           ),
           BlocProvider(create: (_) => CaseFilterCubit()),
           BlocProvider(
-            create: (c) => SheetCubit(c.read<MarksRepository>())..initialize(),
+            create: (c) => SheetCubit(c.read<PatientsRepository>())..initialize(),
           ),
           BlocProvider(
-            create: (c) => HomeCubit(c.read<MarksRepository>())..initialize(),
+            create: (c) => HomeCubit(c.read<PatientsRepository>())..initialize(),
           ),
           BlocProvider(
-            create: (c) => ErMarkDraftCubit(c.read<MarksRepository>()),
+            create: (c) => PatientDraftCubit(c.read<PatientsRepository>()),
           ),
           BlocProvider(
-            create: (c) => NewChitCubit(c.read<MarksRepository>()),
+            create: (c) => NewChitCubit(c.read<PatientsRepository>()),
           ),
           BlocProvider(
-            create: (c) => CaseRegisterCubit(c.read<MarksRepository>()),
-          ),
-          BlocProvider(
-            create: (c) => SyncConnectionCubit(
-              c.read<PocketBaseService>(),
-              c.read<SyncCubit>(),
-            ),
+            create: (c) => CaseRegisterCubit(c.read<PatientsRepository>()),
           ),
         ],
         child: child,

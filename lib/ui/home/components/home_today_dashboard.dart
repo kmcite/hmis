@@ -171,7 +171,6 @@ class _ShiftMetric extends StatelessWidget {
       variant: active ? LiquidVariant.accent : LiquidVariant.inset,
       tint: cs.primary,
       selected: active,
-      specular: false,
       radius: 14,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
       child: Column(

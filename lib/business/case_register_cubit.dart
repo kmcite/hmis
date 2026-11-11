@@ -3,27 +3,27 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hmis/domain/models/models.dart';
-import 'package:hmis/domain/repositories/marks_repository.dart';
+import 'package:hmis/domain/repositories/patients_repository.dart';
 
 const _pageSize = 50;
 
 class CaseRegisterState extends Equatable {
   const CaseRegisterState({
     this.range,
-    this.marks = const [],
+    this.patients = const [],
     this.loadingMore = false,
     this.exhausted = false,
   });
 
   final DateRange? range;
-  final List<Mark> marks;
+  final List<Patient> patients;
   final bool loadingMore;
   final bool exhausted;
 
-  Map<DateTime, List<Mark>> get groupedByDay {
-    final grouped = <DateTime, List<Mark>>{};
-    for (final mark in marks) {
-      grouped.putIfAbsent(mark.date, () => []).add(mark);
+  Map<DateTime, List<Patient>> get groupedByDay {
+    final grouped = <DateTime, List<Patient>>{};
+    for (final patient in patients) {
+      grouped.putIfAbsent(patient.date, () => []).add(patient);
     }
     for (final list in grouped.values) {
       list.sort(
@@ -38,18 +38,18 @@ class CaseRegisterState extends Equatable {
   CaseRegisterState copyWith({
     DateRange? range,
     bool clearRange = false,
-    List<Mark>? marks,
+    List<Patient>? patients,
     bool? loadingMore,
     bool? exhausted,
   }) => CaseRegisterState(
     range: clearRange ? null : (range ?? this.range),
-    marks: marks ?? this.marks,
+    patients: patients ?? this.patients,
     loadingMore: loadingMore ?? this.loadingMore,
     exhausted: exhausted ?? this.exhausted,
   );
 
   @override
-  List<Object?> get props => [range, marks, loadingMore, exhausted];
+  List<Object?> get props => [range, patients, loadingMore, exhausted];
 }
 
 class CaseRegisterCubit extends Cubit<CaseRegisterState> {
@@ -57,7 +57,7 @@ class CaseRegisterCubit extends Cubit<CaseRegisterState> {
     _revisionSub = _repository.revisions.listen((_) => _reset());
   }
 
-  final MarksRepository _repository;
+  final PatientsRepository _repository;
   StreamSubscription<int>? _revisionSub;
   int _page = 1;
 
@@ -69,7 +69,7 @@ class CaseRegisterCubit extends Cubit<CaseRegisterState> {
 
   void _reset() {
     _page = 1;
-    emit(state.copyWith(marks: const [], exhausted: false));
+    emit(state.copyWith(patients: const [], exhausted: false));
   }
 
   Future<void> loadMore() async {
@@ -83,7 +83,7 @@ class CaseRegisterCubit extends Cubit<CaseRegisterState> {
       );
       emit(
         state.copyWith(
-          marks: [...state.marks, ...result.items],
+          patients: [...state.patients, ...result.items],
           exhausted: result.items.length < _pageSize,
         ),
       );

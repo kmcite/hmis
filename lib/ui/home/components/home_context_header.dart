@@ -67,7 +67,6 @@ class _HomeContextHeaderState extends State<HomeContextHeader> {
         const SizedBox(height: 10),
         LiquidSurface(
           variant: LiquidVariant.inset,
-          specular: false,
           radius: 12,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(

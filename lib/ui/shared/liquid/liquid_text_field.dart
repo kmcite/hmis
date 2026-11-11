@@ -181,12 +181,12 @@ class _LiquidTextFieldState extends State<LiquidTextField> {
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         alignLabelWithHint: _multiline,
         labelStyle: TextStyle(
-          color: cs.onSurfaceVariant,
+          color: cs.onSurface,
           fontWeight: FontWeight.w600,
           fontSize: 13,
         ),
         hintStyle: TextStyle(
-          color: cs.outline,
+          color: cs.onSurfaceVariant,
           fontSize: 14,
         ),
         prefixIcon: widget.prefixIcon == null
@@ -226,7 +226,6 @@ class _LiquidTextFieldState extends State<LiquidTextField> {
         variant: showAccent ? LiquidVariant.accent : LiquidVariant.inset,
         tint: cs.primary,
         selected: showAccent,
-        specular: false,
         radius: LiquidTokens.radiusMd,
         padding: EdgeInsets.fromLTRB(
           widget.prefixIcon != null ? 8 : 14,

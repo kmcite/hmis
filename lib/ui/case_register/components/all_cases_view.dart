@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hmis/business/case_register_cubit.dart';
 import 'package:hmis/ui/case_register/components/case_register_empty_view.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
-import 'package:hmis/ui/case_register/components/er_mark_tile.dart';
+import 'package:hmis/ui/case_register/components/patient_tile.dart';
 
 class AllCasesView extends StatefulWidget {
   const AllCasesView({super.key});
@@ -28,11 +28,11 @@ class _AllCasesViewState extends State<AllCasesView> {
   Widget build(BuildContext context) {
     final register = context.watch<CaseRegisterCubit>().state;
 
-    if (register.loadingMore && register.marks.isEmpty) {
+    if (register.loadingMore && register.patients.isEmpty) {
       return const LiquidProgress(message: 'Loading register…');
     }
 
-    if (register.marks.isEmpty) {
+    if (register.patients.isEmpty) {
       return const EmptyView();
     }
 
@@ -45,16 +45,16 @@ class _AllCasesViewState extends State<AllCasesView> {
       },
       child: ListView.separated(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-        itemCount: register.marks.length + (register.loadingMore ? 1 : 0),
+        itemCount: register.patients.length + (register.loadingMore ? 1 : 0),
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
-          if (index >= register.marks.length) {
+          if (index >= register.patients.length) {
             return const Padding(
               padding: EdgeInsets.all(16),
               child: LiquidProgress(compact: true),
             );
           }
-          return ErMarkTile(register.marks[index]);
+          return PatientTile(register.patients[index]);
         },
       ),
     );

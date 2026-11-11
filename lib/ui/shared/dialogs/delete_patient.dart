@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hmis/business/er_mark_draft_cubit.dart';
+import 'package:hmis/business/patient_draft_cubit.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
 import 'package:hmis/domain/models/models.dart';
-import 'package:hmis/domain/repositories/marks_repository.dart';
+import 'package:hmis/domain/repositories/patients_repository.dart';
 
-class DeleteErMarkDialog extends StatelessWidget {
-  const DeleteErMarkDialog(this.markToDelete, {super.key});
+class DeletePatientDialog extends StatelessWidget {
+  const DeletePatientDialog(this.patientToDelete, {super.key});
 
-  final Mark markToDelete;
+  final Patient patientToDelete;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final caseType = markToDelete.caseType;
-    final shift = markToDelete.shift;
+    final caseType = patientToDelete.caseType;
+    final shift = patientToDelete.shift;
     final typeColor = caseType.color;
     final cs = theme.colorScheme;
 
@@ -25,8 +25,7 @@ class DeleteErMarkDialog extends StatelessWidget {
         children: [
           LiquidDialogTitle('Delete case', icon: Icons.delete_outline),
           Text(
-            'This cannot be undone. The record will be removed from this device '
-            'and sync outbox.',
+            'This cannot be undone. The record will be removed from this device.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: cs.onSurfaceVariant,
             ),
@@ -34,7 +33,6 @@ class DeleteErMarkDialog extends StatelessWidget {
           const SizedBox(height: 16),
           LiquidCard(
             variant: LiquidVariant.inset,
-            specular: false,
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,25 +56,25 @@ class DeleteErMarkDialog extends StatelessWidget {
                 _DialogInfoRow(
                   icon: Icons.person_outline,
                   label: 'Patient',
-                  value: markToDelete.patientName?.isEmpty ?? true
+                  value: patientToDelete.patientName?.isEmpty ?? true
                       ? 'Unknown'
-                      : markToDelete.patientName!,
-                  dimmed: markToDelete.patientName?.isEmpty ?? true,
+                      : patientToDelete.patientName!,
+                  dimmed: patientToDelete.patientName?.isEmpty ?? true,
                 ),
-                if ((markToDelete.ageYears ?? 0) > 0) ...[
+                if ((patientToDelete.ageYears ?? 0) > 0) ...[
                   const SizedBox(height: 8),
                   _DialogInfoRow(
                     icon: Icons.calendar_today_outlined,
                     label: 'Age',
-                    value: '${markToDelete.ageYears} years',
+                    value: '${patientToDelete.ageYears} years',
                   ),
                 ],
-                if (markToDelete.remarks?.isNotEmpty ?? false) ...[
+                if (patientToDelete.remarks?.isNotEmpty ?? false) ...[
                   const SizedBox(height: 8),
                   _DialogInfoRow(
                     icon: Icons.notes_outlined,
                     label: 'Remarks',
-                    value: markToDelete.remarks ?? '',
+                    value: patientToDelete.remarks ?? '',
                   ),
                 ],
               ],
@@ -86,7 +84,6 @@ class DeleteErMarkDialog extends StatelessWidget {
           LiquidSurface(
             variant: LiquidVariant.accent,
             tint: cs.error,
-            specular: false,
             radius: 12,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
@@ -115,9 +112,9 @@ class DeleteErMarkDialog extends StatelessWidget {
               LiquidDialogDestructiveButton(
                 label: 'Delete',
                 onPressed: () async {
-                  await context.read<MarksRepository>().remove(markToDelete.id);
-                  final draft = context.read<ErMarkDraftCubit>();
-                  if (draft.state.selectedId == markToDelete.id) {
+                  await context.read<PatientsRepository>().remove(patientToDelete.id);
+                  final draft = context.read<PatientDraftCubit>();
+                  if (draft.state.selectedId == patientToDelete.id) {
                     draft.clearSelection();
                   }
                   if (context.mounted) Navigator.of(context).pop();

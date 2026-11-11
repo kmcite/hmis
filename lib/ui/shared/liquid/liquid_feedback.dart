@@ -17,7 +17,6 @@ void showLiquidSnackBar(BuildContext context, String message, {IconData? icon}) 
       content: LiquidSurface(
         variant: LiquidVariant.elevated,
         radius: LiquidTokens.radiusMd,
-        specular: false,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [

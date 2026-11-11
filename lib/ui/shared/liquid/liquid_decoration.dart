@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'liquid_variant.dart';
 
-/// Builds a layered gradient + border + shadow surface (no backdrop blur).
+/// Builds a flat tinted surface: solid fill + border + shadow.
 BoxDecoration liquidDecoration(
   BuildContext context, {
   LiquidVariant variant = LiquidVariant.surface,
@@ -15,15 +15,13 @@ BoxDecoration liquidDecoration(
   final isDark = Theme.of(context).brightness == Brightness.dark;
   final accent = tint ?? cs.primary;
 
-  Color top;
-  Color bottom;
+  Color color;
   Color border;
   List<BoxShadow> shadows;
 
   switch (variant) {
     case LiquidVariant.hero:
-      top = Color.lerp(accent, Colors.white, isDark ? 0.12 : 0.22)!;
-      bottom = Color.lerp(accent, Colors.black, isDark ? 0.35 : 0.18)!;
+      color = accent;
       border = Colors.white.withValues(alpha: isDark ? 0.18 : 0.28);
       shadows = [
         BoxShadow(
@@ -33,9 +31,7 @@ BoxDecoration liquidDecoration(
         ),
       ];
     case LiquidVariant.accent:
-      final base = accent.withValues(alpha: isDark ? 0.35 : 0.14);
-      top = Color.lerp(base, Colors.white, isDark ? 0.08 : 0.45)!;
-      bottom = Color.lerp(base, Colors.black, isDark ? 0.12 : 0.06)!;
+      color = accent.withValues(alpha: isDark ? 0.35 : 0.14);
       border = accent.withValues(alpha: isDark ? 0.45 : 0.35);
       shadows = [
         BoxShadow(
@@ -45,8 +41,7 @@ BoxDecoration liquidDecoration(
         ),
       ];
     case LiquidVariant.elevated:
-      top = cs.surfaceContainerHigh;
-      bottom = cs.surfaceContainer;
+      color = cs.surfaceContainerHigh;
       border = cs.outlineVariant.withValues(alpha: isDark ? 0.55 : 0.65);
       shadows = [
         BoxShadow(
@@ -56,13 +51,11 @@ BoxDecoration liquidDecoration(
         ),
       ];
     case LiquidVariant.inset:
-      top = cs.surfaceContainerLow;
-      bottom = cs.surfaceContainerHighest.withValues(alpha: 0.85);
-      border = cs.outlineVariant.withValues(alpha: 0.35);
+      color = cs.surfaceContainerHigh;
+      border = cs.outline.withValues(alpha: isDark ? 0.5 : 0.45);
       shadows = const [];
     case LiquidVariant.surface:
-      top = cs.surfaceContainerLowest;
-      bottom = cs.surfaceContainerLow;
+      color = cs.surfaceContainerLow;
       border = cs.outlineVariant.withValues(alpha: isDark ? 0.4 : 0.5);
       shadows = [
         BoxShadow(
@@ -74,8 +67,7 @@ BoxDecoration liquidDecoration(
   }
 
   if (selected) {
-    top = Color.lerp(top, accent, 0.55)!;
-    bottom = Color.lerp(bottom, accent, 0.35)!;
+    color = Color.lerp(color, accent, 0.45)!;
     border = accent.withValues(alpha: 0.85);
     shadows = [
       BoxShadow(
@@ -87,11 +79,7 @@ BoxDecoration liquidDecoration(
   }
 
   return BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [top, bottom],
-    ),
+    color: color,
     borderRadius: BorderRadius.circular(radius),
     border: Border.all(
       color: borderSide?.color ?? border,

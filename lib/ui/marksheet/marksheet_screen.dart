@@ -16,13 +16,16 @@ Widget _marksheetCell(
   Color? tint,
   bool highlighted = false,
   double? height,
+  VoidCallback? onTap,
+  VoidCallback? onLongPress,
 }) {
   return LiquidSurface(
+    onTap: onTap,
+    onLongPress: onLongPress,
     variant: highlighted ? LiquidVariant.accent : LiquidVariant.surface,
     tint: tint,
     selected: highlighted,
     radius: 10,
-    specular: false,
     margin: const EdgeInsets.all(3),
     child: height != null
         ? SizedBox(height: height, child: Center(child: child))
@@ -70,9 +73,9 @@ class MarksheetScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: sheet.loading && sheet.marks.isEmpty
+        child: sheet.loading && sheet.patients.isEmpty
             ? const LiquidProgress(message: 'Loading marksheet…')
-            : sheet.error != null && sheet.marks.isEmpty
+            : sheet.error != null && sheet.patients.isEmpty
             ? HmisEmptyState(
                 icon: Icons.cloud_off_outlined,
                 title: 'Could not load marksheet',
@@ -225,8 +228,11 @@ class MarksheetScreen extends StatelessWidget {
               final isCurrentShift = shift == currentShift;
               final count = rowMap[shift]!;
               return Expanded(
-                child: GestureDetector(
-                  onTap: () => sheet.markCase(type),
+                child: _marksheetCell(
+                  context,
+                  tint: theme.colorScheme.primary,
+                  highlighted: isCurrentShift,
+                  onTap: () => sheet.addPatient(type),
                   onLongPress: () => showDialog(
                     context: context,
                     builder: (_) => MarksheetGridDetailsDialog(
@@ -235,21 +241,16 @@ class MarksheetScreen extends StatelessWidget {
                       dutyShift: shift,
                     ),
                   ),
-                  child: _marksheetCell(
-                    context,
-                    tint: theme.colorScheme.primary,
-                    highlighted: isCurrentShift,
-                    child: Text(
-                      '$count',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontSize: isCurrentShift ? 20 : 17,
-                        fontWeight: FontWeight.w900,
-                        color: isCurrentShift
-                            ? theme.colorScheme.primary
-                            : count > 0
-                            ? theme.textTheme.bodyLarge?.color
-                            : theme.disabledColor,
-                      ),
+                  child: Text(
+                    '$count',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontSize: isCurrentShift ? 20 : 17,
+                      fontWeight: FontWeight.w900,
+                      color: isCurrentShift
+                          ? theme.colorScheme.primary
+                          : count > 0
+                          ? theme.textTheme.bodyLarge?.color
+                          : theme.disabledColor,
                     ),
                   ),
                 ),

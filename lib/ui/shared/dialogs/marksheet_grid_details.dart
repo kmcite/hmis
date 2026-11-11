@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hmis/business/er_mark_draft_cubit.dart';
+import 'package:hmis/business/patient_draft_cubit.dart';
 import 'package:hmis/business/sheet_cubit.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
 import 'package:hmis/domain/models/models.dart';
-import 'package:hmis/domain/repositories/marks_repository.dart';
+import 'package:hmis/domain/repositories/patients_repository.dart';
 import 'package:hmis/ui/shared/widgets/hmis_empty_state.dart';
 
 class MarksheetGridDetailsDialog extends StatefulWidget {
@@ -39,7 +39,7 @@ class _MarksheetGridDetailsDialogState
 
   @override
   Widget build(BuildContext context) {
-    final marks = context.watch<SheetCubit>().state.cellMarks;
+    final patients = context.watch<SheetCubit>().state.cellPatients;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -57,7 +57,7 @@ class _MarksheetGridDetailsDialogState
               ),
               const SizedBox(height: 8),
               Expanded(
-                child: marks.isEmpty
+                child: patients.isEmpty
                     ? HmisEmptyState(
                         icon: Icons.medical_services_outlined,
                         title: 'No cases recorded',
@@ -65,10 +65,10 @@ class _MarksheetGridDetailsDialogState
                       )
                     : ListView.separated(
                         padding: const EdgeInsets.only(top: 4),
-                        itemCount: marks.length,
+                        itemCount: patients.length,
                         separatorBuilder: (_, __) => const SizedBox(height: 8),
                         itemBuilder: (context, index) =>
-                            _PatientCard(mark: marks[index]),
+                            _PatientCard(patient: patients[index]),
                       ),
               ),
             ],
@@ -80,14 +80,14 @@ class _MarksheetGridDetailsDialogState
 }
 
 class _PatientCard extends StatelessWidget {
-  final Mark mark;
-  const _PatientCard({required this.mark});
+  final Patient patient;
+  const _PatientCard({required this.patient});
 
   Future<void> _delete(BuildContext context) async {
-    final repo = context.read<MarksRepository>();
-    final draft = context.read<ErMarkDraftCubit>();
-    await repo.remove(mark.id);
-    if (draft.state.selectedId == mark.id) {
+    final repo = context.read<PatientsRepository>();
+    final draft = context.read<PatientDraftCubit>();
+    await repo.remove(patient.id);
+    if (draft.state.selectedId == patient.id) {
       draft.clearSelection();
     }
     if (context.mounted) {
@@ -102,18 +102,18 @@ class _PatientCard extends StatelessWidget {
       variant: LiquidVariant.surface,
       onTap: () => _delete(context),
       title: Text(
-        mark.patientName?.isNotEmpty == true
-            ? mark.patientName!
-            : 'Anonymous #${mark.id}',
+        patient.patientName?.isNotEmpty == true
+            ? patient.patientName!
+            : 'Anonymous #${patient.id}',
       ),
       subtitle: Text(
         [
-          if ((mark.ageYears ?? 0) > 0) '${mark.ageYears} yrs',
-          if (mark.remarks?.isNotEmpty == true) mark.remarks!,
+          if ((patient.ageYears ?? 0) > 0) '${patient.ageYears} yrs',
+          if (patient.remarks?.isNotEmpty == true) patient.remarks!,
           'Tap to delete',
         ].join(' · '),
       ),
-      leading: Icon(mark.caseType.icon, size: 22),
+      leading: Icon(patient.caseType.icon, size: 22),
       trailing: Icon(Icons.delete_outline, color: cs.error, size: 20),
     );
   }

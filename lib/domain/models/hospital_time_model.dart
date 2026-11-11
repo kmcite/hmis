@@ -1,4 +1,4 @@
-import 'package:hmis/domain/models/mark_model.dart';
+import 'package:hmis/domain/models/patient_model.dart';
 import 'package:hmis/services/datetime.dart';
 
 /// Hospital duty calendar: sheet day starts 08:00; shifts 08–14 / 14–20 / 20–08.
@@ -8,7 +8,7 @@ abstract final class HospitalTime {
   static DateTime sheetDateFor(DateTime wallClock) => wallClock.shiftDateOf();
 
   static String sheetKeyFor(DateTime wallClock) =>
-      Mark.ymd(sheetDateFor(wallClock));
+      Patient.ymd(sheetDateFor(wallClock));
 
   static DutyShift shiftFor(DateTime wallClock) {
     final h = wallClock.hour;
@@ -24,12 +24,12 @@ abstract final class HospitalTime {
     required DateTime sheetDate,
     required DateTime arrival,
   }) {
-    return Mark.ymd(Mark.dateOnly(sheetDate)) !=
-        Mark.ymd(Mark.dateOnly(arrival));
+    return Patient.ymd(Patient.dateOnly(sheetDate)) !=
+        Patient.ymd(Patient.dateOnly(arrival));
   }
 
-  static Mark newMarkAt(DateTime wall, {CaseType caseType = CaseType.medical}) =>
-      Mark(
+  static Patient newPatientAt(DateTime wall, {CaseType caseType = CaseType.medical}) =>
+      Patient(
         date: sheetDateFor(wall),
         shift: shiftFor(wall),
         caseType: caseType,
@@ -37,8 +37,8 @@ abstract final class HospitalTime {
       );
 }
 
-extension MarkHospitalTime on Mark {
-  DateTime get sheetDate => Mark.dateOnly(date);
+extension PatientHospitalTime on Patient {
+  DateTime get sheetDate => Patient.dateOnly(date);
 
   DateTime? get arrivalAt => createdAt;
 
@@ -53,7 +53,7 @@ extension MarkHospitalTime on Mark {
 
   DutyShift get derivedShift => HospitalTime.shiftFor(effectiveArrival());
 
-  Mark normalizedForSave({DateTime? wallFallback}) {
+  Patient normalizedForSave({DateTime? wallFallback}) {
     final wall = effectiveArrival(wallFallback: wallFallback);
     return copyWith(
       date: HospitalTime.sheetDateFor(wall),

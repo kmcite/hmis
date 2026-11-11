@@ -31,7 +31,6 @@ class HmisEmptyState extends StatelessWidget {
               LiquidSurface(
                 variant: LiquidVariant.accent,
                 tint: cs.primary,
-                specular: false,
                 radius: 20,
                 padding: const EdgeInsets.all(14),
                 child: Icon(icon, size: 40, color: cs.primary),

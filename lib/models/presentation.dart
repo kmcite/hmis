@@ -1,4 +1,4 @@
-/// Legacy import path for mark UI extensions.
+/// Legacy import path for patient UI extensions.
 library;
 
-export 'package:hmis/domain/models/mark_presentation_model.dart';
+export 'package:hmis/domain/models/patient_presentation_model.dart';

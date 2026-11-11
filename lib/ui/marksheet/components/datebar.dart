@@ -79,7 +79,6 @@ class _DateBarState extends State<DateBar> {
     return LiquidSurface(
       variant: LiquidVariant.elevated,
       radius: 20,
-      specular: false,
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       padding: EdgeInsets.zero,
       child: Column(
@@ -106,7 +105,7 @@ class _DateBarState extends State<DateBar> {
               itemBuilder: (context, index) {
                 final dayOffset = index - _windowDaysHalf;
                 final date = _anchor.add(Duration(days: dayOffset));
-                final key = Mark.ymd(date);
+                final key = Patient.ymd(date);
                 return RepaintBoundary(
                   child: _DateTile(
                     date: date,
@@ -160,7 +159,6 @@ class _MonthHeader extends StatelessWidget {
           LiquidSurface(
             variant: LiquidVariant.accent,
             radius: 12,
-            specular: false,
             padding: const EdgeInsets.all(8),
             child: Icon(
               Icons.calendar_month_rounded,
@@ -235,7 +233,6 @@ class _DateTile extends StatelessWidget {
         tint: cs.primary,
         radius: 18,
         selected: isSelected,
-        specular: !isSelected,
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: SizedBox(
           width: _dateBarItemWidth,

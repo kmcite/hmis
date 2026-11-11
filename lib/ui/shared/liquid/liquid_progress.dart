@@ -32,7 +32,6 @@ class LiquidProgress extends StatelessWidget {
     return Center(
       child: LiquidSurface(
         variant: LiquidVariant.surface,
-        specular: false,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,

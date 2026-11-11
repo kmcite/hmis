@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <objectbox_flutter_libs/objectbox_flutter_libs_plugin_c_api.h>
+#include <shared_database_windows/shared_database_windows_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  ObjectboxFlutterLibsPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("ObjectboxFlutterLibsPluginCApi"));
+  SharedDatabaseWindowsPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("SharedDatabaseWindowsPluginCApi"));
 }

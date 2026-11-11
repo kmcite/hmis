@@ -35,7 +35,6 @@ class LiquidIconButton extends StatelessWidget {
       tint: color,
       selected: selected,
       radius: LiquidTokens.radiusMd,
-      specular: false,
       padding: EdgeInsets.zero,
       child: SizedBox(
         width: size,

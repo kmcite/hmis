@@ -37,7 +37,6 @@ class LiquidSheet extends StatelessWidget {
       child: LiquidSurface(
         variant: LiquidVariant.elevated,
         radius: LiquidTokens.radiusXl,
-        specular: true,
         margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
         padding: padding ??
             const EdgeInsets.fromLTRB(20, 12, 20, 24),

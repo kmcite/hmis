@@ -23,7 +23,6 @@ class LiquidDivider extends StatelessWidget {
       child: LiquidSurface(
         variant: LiquidVariant.inset,
         radius: 1,
-        specular: false,
         padding: EdgeInsets.zero,
         child: SizedBox(
           height: 1,

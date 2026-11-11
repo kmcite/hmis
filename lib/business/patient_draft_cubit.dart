@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hmis/domain/models/models.dart';
-import 'package:hmis/domain/repositories/marks_repository.dart';
+import 'package:hmis/domain/repositories/patients_repository.dart';
 
-class ErMarkDraftState extends Equatable {
-  const ErMarkDraftState({
+class PatientDraftState extends Equatable {
+  const PatientDraftState({
     this.selectedId,
     this.loaded,
     this.draft,
@@ -15,8 +15,8 @@ class ErMarkDraftState extends Equatable {
   });
 
   final String? selectedId;
-  final Mark? loaded;
-  final Mark? draft;
+  final Patient? loaded;
+  final Patient? draft;
   final bool saving;
   final Object? saveError;
 
@@ -28,17 +28,17 @@ class ErMarkDraftState extends Equatable {
 
   bool get canSave => isDirty && !saving;
 
-  ErMarkDraftState copyWith({
+  PatientDraftState copyWith({
     String? selectedId,
     bool clearSelectedId = false,
-    Mark? loaded,
+    Patient? loaded,
     bool clearLoaded = false,
-    Mark? draft,
+    Patient? draft,
     bool clearDraft = false,
     bool? saving,
     Object? saveError,
     bool clearSaveError = false,
-  }) => ErMarkDraftState(
+  }) => PatientDraftState(
     selectedId: clearSelectedId ? null : (selectedId ?? this.selectedId),
     loaded: clearLoaded ? null : (loaded ?? this.loaded),
     draft: clearDraft ? null : (draft ?? this.draft),
@@ -50,15 +50,15 @@ class ErMarkDraftState extends Equatable {
   List<Object?> get props => [selectedId, loaded, draft, saving, saveError];
 }
 
-class ErMarkDraftCubit extends Cubit<ErMarkDraftState> {
-  ErMarkDraftCubit(this._repository) : super(const ErMarkDraftState()) {
+class PatientDraftCubit extends Cubit<PatientDraftState> {
+  PatientDraftCubit(this._repository) : super(const PatientDraftState()) {
     _revisionSub = _repository.revisions.listen((_) {
       final id = state.selectedId;
       if (id != null) unawaited(_load(id));
     });
   }
 
-  final MarksRepository _repository;
+  final PatientsRepository _repository;
   StreamSubscription<int>? _revisionSub;
 
   void open(String id) {
@@ -93,10 +93,21 @@ class ErMarkDraftCubit extends Cubit<ErMarkDraftState> {
   void editRemarks(String remarks) =>
       emit(state.copyWith(draft: state.draft?.copyWith(remarks: remarks)));
 
+  void editHistory(String history) =>
+      emit(state.copyWith(draft: state.draft?.copyWith(history: history)));
+
+  void editExamination(String examination) => emit(
+    state.copyWith(draft: state.draft?.copyWith(examination: examination)),
+  );
+
+  void editManagement(String management) => emit(
+    state.copyWith(draft: state.draft?.copyWith(management: management)),
+  );
+
   void editCaseType(CaseType caseType) =>
       emit(state.copyWith(draft: state.draft?.copyWith(caseType: caseType)));
 
-  void editGender(bool isMale) =>
+  void editGender(bool? isMale) =>
       emit(state.copyWith(draft: state.draft?.copyWith(isMale: isMale)));
 
   void editDate(DateTime date) => emit(
@@ -123,11 +134,11 @@ class ErMarkDraftCubit extends Cubit<ErMarkDraftState> {
   void revert() => emit(state.copyWith(draft: state.loaded));
 
   Future<void> _load(String id) async {
-    final mark = await _repository.fetchOne(id);
+    final patient = await _repository.fetchOne(id);
     emit(
       state.copyWith(
-        loaded: mark,
-        draft: mark != null && state.draft?.id != mark.id ? mark : state.draft,
+        loaded: patient,
+        draft: patient != null && state.draft?.id != patient.id ? patient : state.draft,
       ),
     );
   }

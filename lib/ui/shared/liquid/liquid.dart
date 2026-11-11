@@ -24,7 +24,6 @@ export 'liquid_scaffold.dart';
 export 'liquid_section.dart';
 export 'liquid_sheet.dart';
 export 'liquid_selectable_tile.dart';
-export 'liquid_specular.dart';
 export 'liquid_surface.dart';
 export 'liquid_text_field.dart';
 export 'liquid_theme.dart';

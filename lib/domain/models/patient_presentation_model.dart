@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Icons;
-import 'package:hmis/domain/models/mark_model.dart';
+import 'package:hmis/domain/models/patient_model.dart';
 
 extension DutyShiftUi on DutyShift {
   IconData get icon => switch (this) {
@@ -15,8 +15,6 @@ extension CaseTypeUi on CaseType {
     CaseType.medical => CupertinoIcons.lab_flask,
     CaseType.surgical => CupertinoIcons.bandage,
     CaseType.pediatrics => CupertinoIcons.person_2,
-    CaseType.minorOt => CupertinoIcons.hammer,
-    CaseType.rta => CupertinoIcons.car_detailed,
     CaseType.dogBite => CupertinoIcons.paw,
     CaseType.mlc => CupertinoIcons.shield,
     CaseType.postmortem => CupertinoIcons.doc_plaintext,
@@ -26,8 +24,6 @@ extension CaseTypeUi on CaseType {
     CaseType.medical => CupertinoColors.systemBlue,
     CaseType.surgical => CupertinoColors.systemGreen,
     CaseType.pediatrics => CupertinoColors.systemPurple,
-    CaseType.minorOt => CupertinoColors.systemOrange,
-    CaseType.rta => CupertinoColors.systemRed,
     CaseType.dogBite => CupertinoColors.systemBrown,
     CaseType.mlc => CupertinoColors.systemIndigo,
     CaseType.postmortem => CupertinoColors.systemGrey,

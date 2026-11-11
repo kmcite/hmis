@@ -1,7 +1,7 @@
 /// Wall-clock formatting and the hospital **sheet day** (starts 08:00 local).
 ///
 /// Between 00:00–07:59 the sheet still belongs to the previous calendar day
-/// (night shift). [createdAt] on [Mark] keeps the real arrival instant.
+/// (night shift). [createdAt] on [Patient] keeps the real arrival instant.
 
 extension DateTimeExtension on DateTime {
   DateTime shiftDateOf() => hour < 8

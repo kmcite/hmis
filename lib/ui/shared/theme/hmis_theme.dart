@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hmis/ui/shared/liquid/liquid.dart';
 
 abstract final class HmisTheme {
-  static const _seed = Color(0xFF0D6E6E);
+  static const _seed = Color(0xFF6D28D9);
 
   static ThemeData light() {
     final scheme = ColorScheme.fromSeed(

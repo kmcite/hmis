@@ -28,7 +28,6 @@ class LiquidChip extends StatelessWidget {
       variant: LiquidVariant.inset,
       tint: color,
       radius: dense ? 8 : 10,
-      specular: false,
       padding: EdgeInsets.symmetric(
         horizontal: dense ? 6 : 8,
         vertical: dense ? 2 : 4,

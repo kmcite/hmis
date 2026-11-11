@@ -30,7 +30,6 @@ class HomeCaseTypeBreakdown extends StatelessWidget {
           const LiquidProgress(compact: true)
         else if (total == 0)
           LiquidCard(
-            specular: false,
             padding: const EdgeInsets.all(20),
             child: Text(
               'No cases yet. Start with New chit or tap the marksheet.',
@@ -43,7 +42,6 @@ class HomeCaseTypeBreakdown extends StatelessWidget {
         else
           LiquidSurface(
             variant: LiquidVariant.surface,
-            specular: false,
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
             child: Column(
               children: [
@@ -90,7 +88,6 @@ class _TypeRow extends StatelessWidget {
         LiquidSurface(
           variant: LiquidVariant.accent,
           tint: color,
-          specular: false,
           radius: 10,
           padding: const EdgeInsets.all(8),
           child: Icon(type.icon, size: 16, color: color),

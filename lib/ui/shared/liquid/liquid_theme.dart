@@ -8,22 +8,18 @@ import 'liquid_tokens.dart';
 class LiquidThemeData {
   const LiquidThemeData({
     this.defaultRadius = LiquidTokens.radiusLg,
-    this.specularEnabled = true,
     this.tapScale = 0.98,
   });
 
   final double defaultRadius;
-  final bool specularEnabled;
   final double tapScale;
 
   LiquidThemeData copyWith({
     double? defaultRadius,
-    bool? specularEnabled,
     double? tapScale,
   }) {
     return LiquidThemeData(
       defaultRadius: defaultRadius ?? this.defaultRadius,
-      specularEnabled: specularEnabled ?? this.specularEnabled,
       tapScale: tapScale ?? this.tapScale,
     );
   }
@@ -51,8 +47,6 @@ class LiquidTheme extends ThemeExtension<LiquidTheme> {
       data: LiquidThemeData(
         defaultRadius:
             lerpDouble(data.defaultRadius, other.data.defaultRadius, t)!,
-        specularEnabled:
-            t < 0.5 ? data.specularEnabled : other.data.specularEnabled,
         tapScale: lerpDouble(data.tapScale, other.data.tapScale, t)!,
       ),
     );

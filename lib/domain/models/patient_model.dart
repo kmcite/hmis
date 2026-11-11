@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pocketbase/pocketbase.dart';
 
 // ---------------------------------------------------------------- enums
 
@@ -9,7 +8,7 @@ enum DutyShift {
   night;
 
   /// Throws on unknown input — a schema rename or typo must surface, not
-  /// silently become a Morning mark on the register.
+  /// silently become a Morning entry on the register.
   static DutyShift parse(String v) => DutyShift.values.firstWhere(
     (e) => e.name == v,
     orElse: () => throw FormatException('Unknown DutyShift: $v'),
@@ -26,24 +25,25 @@ enum CaseType {
   medical,
   surgical,
   pediatrics,
-  minorOt,
-  rta,
   dogBite,
   mlc,
   postmortem;
 
-  static CaseType parse(String v) => CaseType.values.firstWhere(
-    (e) => e.name == v,
-    orElse: () => throw FormatException('Unknown CaseType: $v'),
-  );
+  /// `rta` and `minorOt` were merged into [surgical]; stored records with
+  /// the legacy names still decode.
+  static CaseType parse(String v) => switch (v) {
+    'rta' || 'minorOt' || 'minor_ot' => CaseType.surgical,
+    _ => CaseType.values.firstWhere(
+      (e) => e.name == v,
+      orElse: () => throw FormatException('Unknown CaseType: $v'),
+    ),
+  };
 
   String get label => switch (this) {
     CaseType.medical => 'Medical',
     CaseType.surgical => 'Surgical',
     CaseType.pediatrics => 'Pediatrics',
-    CaseType.minorOt => 'Minor OT',
-    CaseType.rta => 'RTA',
-    CaseType.dogBite => 'Dog Bites',
+    CaseType.dogBite => 'ARV - candidates',
     CaseType.mlc => 'MLC',
     CaseType.postmortem => 'Autopsy',
   };
@@ -54,8 +54,8 @@ enum CaseType {
 const _unset = Object();
 
 @immutable
-class Mark {
-  const Mark({
+class Patient {
+  const Patient({
     this.id = '',
     required this.date,
     required this.shift,
@@ -64,6 +64,9 @@ class Mark {
     this.ageYears,
     this.isMale,
     this.remarks,
+    this.history,
+    this.examination,
+    this.management,
     this.createdAt,
   });
 
@@ -81,49 +84,53 @@ class Mark {
   final bool? isMale;
   final String? remarks;
 
+  /// Clinical note sections: history taking, on-examination, management.
+  final String? history;
+  final String? examination;
+  final String? management;
+
   final DateTime? createdAt;
 
   bool get isPersisted => id.isNotEmpty;
 
   // ------------------------------------------------------- serialization
 
-  factory Mark.fromRecord(RecordModel r) => Mark(
-    id: r.id,
-    date: parseYmd(r.get<String>('sheet_date')),
-    shift: DutyShift.parse(r.get<String>('shift')),
-    caseType: CaseType.parse(r.get<String>('case_type')),
-    patientName: _orNull(r.get<String>('patient_name')),
-    // Text column, not number — PocketBase coerces an unset number to 0,
-    // which would make every unrecorded age indistinguishable from 0y.
-    ageYears: int.tryParse(r.get<String>('age_years')),
-    // Select column for the same reason: an unset bool reads back false.
-    isMale: switch (r.get<String>('sex')) {
-      'male' => true,
-      'female' => false,
-      _ => null,
-    },
-    remarks: _orNull(r.get<String>('remarks')),
-    createdAt: DateTime.tryParse(r.get<String>('created'))?.toLocal(),
-  );
-
-  /// Empty strings rather than nulls — PocketBase rejects explicit null on
-  /// text/select fields, and '' round-trips back to null via _orNull.
-  Map<String, dynamic> toBody() => {
-    'sheet_date': ymd(date),
-    'shift': shift.name,
-    'case_type': caseType.name,
-    'patient_name': patientName ?? '',
-    'age_years': ageYears?.toString() ?? '',
-    'sex': switch (isMale) {
-      true => 'male',
-      false => 'female',
-      null => '',
-    },
-    'remarks': remarks ?? '',
-    // 'created' is server-owned — never sent.
+  /// JSON document stored in the shared database (`patients` collection).
+  /// Nullable fields stay null — absent keys decode back to null.
+  static Map<String, dynamic> toData(Patient m) => {
+    'sheetDateYmd': ymd(m.date),
+    'dateMs': dateOnly(m.date).millisecondsSinceEpoch,
+    'shift': m.shift.name,
+    'caseType': m.caseType.name,
+    'patientName': m.patientName,
+    'ageYears': m.ageYears,
+    'isMale': m.isMale,
+    'remarks': m.remarks,
+    'history': m.history,
+    'examination': m.examination,
+    'management': m.management,
+    'createdAtMs': m.createdAt?.millisecondsSinceEpoch,
   };
 
-  static String? _orNull(String s) => s.trim().isEmpty ? null : s.trim();
+  factory Patient.fromData(String id, Map<String, dynamic> d) => Patient(
+    id: id,
+    date: DateTime.fromMillisecondsSinceEpoch(_int(d['dateMs'])),
+    shift: DutyShift.parse(d['shift'] as String),
+    caseType: CaseType.parse(d['caseType'] as String),
+    patientName: d['patientName'] as String?,
+    ageYears: (d['ageYears'] as num?)?.toInt(),
+    isMale: d['isMale'] as bool?,
+    remarks: d['remarks'] as String?,
+    history: d['history'] as String?,
+    examination: d['examination'] as String?,
+    management: d['management'] as String?,
+    createdAt: d['createdAtMs'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(_int(d['createdAtMs'])),
+  );
+
+  static int _int(Object? v) =>
+      v is int ? v : v is num ? v.toInt() : int.parse('$v');
 
   /// `YYYY-MM-DD` from local parts — never toIso8601String(), which would
   /// drag UTC offset into the sheet key.
@@ -132,20 +139,13 @@ class Mark {
       '${d.month.toString().padLeft(2, '0')}-'
       '${d.day.toString().padLeft(2, '0')}';
 
-  /// Always yields local midnight, tolerant of a plain 'YYYY-MM-DD' or a
-  /// full datetime, in case the column type ever changes.
-  static DateTime parseYmd(String s) {
-    final p = s.split(RegExp('[T ]')).first.split('-');
-    return DateTime(int.parse(p[0]), int.parse(p[1]), int.parse(p[2]));
-  }
-
   static DateTime dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
   // ------------------------------------------------------------- helpers
 
   /// Required fields use `??`; nullable fields use the sentinel so
   /// copyWith(ageYears: null) clears rather than being ignored.
-  Mark copyWith({
+  Patient copyWith({
     String? id,
     DateTime? date,
     DutyShift? shift,
@@ -154,8 +154,11 @@ class Mark {
     Object? ageYears = _unset,
     Object? isMale = _unset,
     Object? remarks = _unset,
+    Object? history = _unset,
+    Object? examination = _unset,
+    Object? management = _unset,
     DateTime? createdAt,
-  }) => Mark(
+  }) => Patient(
     id: id ?? this.id,
     date: date == null ? this.date : dateOnly(date),
     shift: shift ?? this.shift,
@@ -166,6 +169,13 @@ class Mark {
     ageYears: identical(ageYears, _unset) ? this.ageYears : ageYears as int?,
     isMale: identical(isMale, _unset) ? this.isMale : isMale as bool?,
     remarks: identical(remarks, _unset) ? this.remarks : remarks as String?,
+    history: identical(history, _unset) ? this.history : history as String?,
+    examination: identical(examination, _unset)
+        ? this.examination
+        : examination as String?,
+    management: identical(management, _unset)
+        ? this.management
+        : management as String?,
     createdAt: createdAt ?? this.createdAt,
   );
 
@@ -173,7 +183,7 @@ class Mark {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Mark &&
+      other is Patient &&
           id == other.id &&
           date == other.date &&
           shift == other.shift &&
@@ -182,6 +192,9 @@ class Mark {
           ageYears == other.ageYears &&
           isMale == other.isMale &&
           remarks == other.remarks &&
+          history == other.history &&
+          examination == other.examination &&
+          management == other.management &&
           createdAt == other.createdAt;
 
   @override
@@ -194,15 +207,23 @@ class Mark {
     ageYears,
     isMale,
     remarks,
+    history,
+    examination,
+    management,
     createdAt,
   );
 
   @override
   String toString() =>
-      'Mark($id, ${ymd(date)}, ${shift.name}, ${caseType.name})';
+      'Patient($id, ${ymd(date)}, ${shift.name}, ${caseType.name})';
 }
 
-extension MarkX on Mark {
+extension PatientX on Patient {
+  /// Quick marksheet adds carry no identity — they sit in the completion
+  /// queue until a name (and ideally age/sex) is recorded.
+  bool get needsDetails =>
+      patientName == null || patientName!.trim().isEmpty;
+
   String get info {
     final parts = [
       if (patientName != null) patientName!,
